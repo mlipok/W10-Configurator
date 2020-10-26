@@ -564,14 +564,14 @@ EndFunc
 	#Region WINDOWS UPDATE
 
 Func _CreateMsUpdateSession($strhost = @ComputerName)
-	c("Creating a WIndows Update Session...")
+	c("Creating a Windows Update Session...")
 	$objsession = ObjCreate("Microsoft.Update.Session", $strhost)
 	If Not IsObj($objsession) Then Return 0
 	Return $objsession
 EndFunc   ;_CreateMsUpdateSession
 
 Func _CreateSearcher($objsession)
-	c("Creating Searcher Session...")
+	c("Creating Searcher Session..."& @CRLF & "Searching for updates available...")
 	If Not IsObj($objsession) Then Return -1
 	Return $objsession.createupdatesearcher
 EndFunc   ;_CreateSearcher
@@ -625,15 +625,14 @@ Func _PopulateNeeded($Host)
 		Next
 		$objsearcher = 0
 		$arrNeeded = 0
-
 		_UpdatesDownloadAndInstall()
+
 	Else
 
 		GUICtrlSetData($wul,"Your windows is up to date.")
 		c("Your Windows is up to date.")
 
 	EndIf
-	GUI()
 EndFunc   ;_PopulateNeeded
 
 
@@ -642,9 +641,8 @@ Func _UpdatesDownloadAndInstall()
 
 	$selected = _GUICtrlListView_GetSelectedIndices($wulv, True)
 	If $selected[0] = 0 Then
-
-;~ 		MsgBox(64, "Results", "Your windows seems up to date.",5)
 		c("Results: Your Windows seems up to date.")
+
 	EndIf
 	$objsearcher = _CreateMsUpdateSession($Host)
 	For $x = 1 To $selected[0]
@@ -839,7 +837,11 @@ Func _GetSmart()
 
 EndFunc
 
+
+
 Func _Exit()
 
 Exit
+
 EndFunc
+
