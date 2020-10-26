@@ -41,11 +41,9 @@
 #include <EventLog.au3>
 #include <APIDiagConstants.au3>
 #EndRegion
-
 HotKeySet("{NUMPAD0}", "_Exit")
 Opt("GUIResizeMode", $GUI_DOCKAUTO)
-
-#REGION DECLARE VARIABLES
+#REGION VARIABLES <<<<<<<<<<<<<@@@@@@@@@@@@@@@@@@@@@@
 Global $ConfigDir =  @ScriptDir ;temporary
 Global $nas, $cw, $cwe,  $c, $cmdfile, $nas, $sRemoteName
 Global $regPath = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation", $GUI
@@ -56,6 +54,8 @@ Global $info
 Global $sInfos
 Global $compname
 Global $supportHours
+Global $supportPhone
+Global $supportUrl
 Global $Manufacturer
 Global $model
 Global $OEMLogo
@@ -75,33 +75,10 @@ Global $Host = @ComputerName
 Global $BannedList = StringSplit("Silverlight", "|")
 Global $label[10]
 Global $task[15]
-#EndRegion DECLARE VARIABLES
+#EndRegion VARIABLES
 
 
-Gui()
-
-
-#Region INI READ/WRITE
-Func ini($section, $key, $value, $iniread = True) ;Read or edit value in config.ini
-
-	;$iniOpen = FileOpen($iniFile, 2)
-	;c("read state = " & $iniread)
-	Switch $iniread
-
-		Case False ; = overwrite
-
-			return IniWrite($iniFile, $section, $key, $value)
-
-		Case True ; = read only
-
-			return IniRead($iniFile, $section, $key, $value)
-
-	EndSwitch
-
-EndFunc
-#EndRegion INI READ/WRITE
-
-
+GUI()
 
 Func c($cw) ;INFORMATIVE MESSAGES IN CONSOLE
 $c = 0
@@ -129,6 +106,156 @@ Func ConsoleWriteGUI(Const ByRef $hConsole, Const $sTxt); READ C($cw) & cw($cw) 
 	_GUICtrlRichEdit_HideSelection($Console,True)
 EndFunc
 
+
+#Region INI READ/WRITE
+Func ini($section, $key, $value, $iniread = True) ;Read or edit value in config.ini
+
+	;$iniOpen = FileOpen($iniFile, 2)
+	;c("read state = " & $iniread)
+	Switch $iniread
+
+		Case False ; = overwrite
+
+			return IniWrite($iniFile, $section, $key, $value)
+
+		Case True ; = read only
+
+			return IniRead($iniFile, $section, $key, $value)
+
+	EndSwitch
+
+EndFunc
+#EndRegion INI READ/WRITE
+
+Func selfoem() ;**** AutoIt version of oem() ****
+#Region InputBox ;Temporary
+;~ 	$OEMLogo = FileOpenDialog("Choose your OEM Logo", @DesktopDir, "*.bmp")
+;~ 	$Manufacturer = InputBox("OEM", "Type the Manufacturer below")
+;~ 	$Model = InputBox("OEM", "Type the computer model below", $manufacturer)
+;~ 	$supportHours = InputBox("OEM", "Type Support Hours below")
+;~ 	$supportPhone = InputBox("OEM", "Type the Support Phone below")
+;~ 	$supportUrl = InputBox("OEM", "Type the Support Website below","https://")
+#EndRegion InputBox ;Temporary
+	c("OEM installation started !")
+	sleep(500)
+	c("Installing OEM Logo...")
+	_FileCopy($OEMLogo, "C:\Windows\System32")
+	RegWrite( $regPath, "Manufacturer", "REG_SZ", $Manufacturer )
+	c("Added Manufacturer registry key...")
+	RegWrite( $regPath, "Model", "REG_SZ", $Model) ;
+	RegWrite($regPath, "Logo", "REG_SZ", $OEMLogo)
+	c("Added Logo (OEM Logo references) registry key...")
+	Regwrite($regPath, "SupportHours", "REG_SZ", $supportHours)
+	c("Added SupportHours registry key...")
+	RegWrite($regPath, "SupportPhone", "REG_SZ", $supportPhone)
+	c("Added SupportPhone registry key...")
+	RegWrite($regPath, "SupportURL", "REG_SZ", "https://" & $supportUrl)
+	c("Added SupportURL registry key...")
+	sleep(500)
+	c("OEM installation done !")
+
+EndFunc 	   ;**** AutoIt version of oem() ****
+
+
+#Region RZGET <<<  (working flawless)
+Func Rzget()
+    Local $rzcmd
+
+	If FileExists($ConfigDir & "\rzget.exe") Then ; IF RZGET IS IN CONFIG FOLDER @@@@
+		$rzcmd = '@echo off' & @CRLF _
+		& 'call :isAdmin' & @CRLF _
+		& 'if %errorlevel% == 0 (' & @CRLF _
+		& 'goto :run' & @CRLF _
+		& ') else (' & @CRLF _
+		& 'echo Requesting administrative privileges...' & @CRLF _
+		& 'goto :UACPrompt' & @CRLF _
+		& ')' & @CRLF _
+		& 'exit /b' & @CRLF _
+		& ':isAdmin' & @CRLF _
+		& 'fsutil dirty query %systemdrive% >nul' & @CRLF _
+		& 'exit /b' & @CRLF _
+		& ':run' & @CRLF _
+		& 'cmd /c ' & $ConfigDir & '\rzget.exe install "Google Chrome"' & @CRLF _
+		 & 'rzget.exe install "7-zip"' & @CRLF _
+		 & 'rzget.exe install "AdobeReader DC"' &  @CRLF _
+		 & 'rzget.exe install "Edge"' & @CRLF _
+		 & 'echo done.' & @CRLF _
+		& 'exit /b' & @CRLF _
+		& ':UACPrompt' & @CRLF _
+		& 'echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"' & @CRLF _
+		& 'echo UAC.ShellExecute "cmd.exe", "/c %~s0 %~1", "", "runas", 1 >> "%temp%\getadmin.vbs"' & @CRLF _
+		& '"%temp%\getadmin.vbs"' & @CRLF _
+		& 'del "%temp%\getadmin.vbs"' & @CRLF _
+		& 'exit /B'
+	Else ; RZGET.EXE WAS NOT FOUND IN CONFIG FOLDER @@@@
+		c("ruckzuck executable not found...")
+		c("")
+	EndIf
+	c("Creating Rzget process...")
+	FileWrite($ConfigDir & "\rzget.bat", $rzcmd)
+    c("waiting for Rzget to load...")
+    ShellExecute($ConfigDir &  "\rzget.bat")
+    c("Done !")
+
+EndFunc
+#EndRegion RZGET <<< (working flawless)
+
+#Region SCREENSAVER
+Func ScreenSaver($Alive) ;False to reset / True to prevent/disable sleep/power-savings modes (AND screensaver)
+
+	If $Alive = True Then
+		Local $ssKeepAlive = DllCall( 'kernel32.dll', 'long', 'SetThreadExecutionState', 'long', 0x80000003)
+		If @error Then
+			Return SetError( 2, @error, 0x80000000)
+			cw(@error)
+		EndIf
+	Return $ssKeepAlive[0]	; Previous state (typically 0x80000000 [-2147483648])
+		c("Hibernate mode = " & $sSaverActive)
+	ElseIf $Alive = False Then
+		; Flag:	ES_CONTINUOUS (0x80000000) -> (default) -> used alone, it resets timers & allows regular sleep/power-savings mode
+		Local $ssKeepAlive=DllCall('kernel32.dll','long','SetThreadExecutionState','long',0x80000000)
+		If @error Then
+			Return SetError(2,@error,0x80000000)
+			cw(@error)
+		EndIf
+		Return $ssKeepAlive[0]	; Previous state
+	EndIf
+EndFunc
+#EndRegion SCREENSAVER
+
+Func _FileCopy($sRemoteName, $d)
+	Local $FOF_RESPOND_YES = 16
+	Local $FOF_SIMPLEPROGRESS = 256
+	$oShell = ObjCreate("shell.application")
+	$oShell.namespace($d).CopyHere($sRemoteName,$FOF_SIMPLEPROGRESS)
+EndFunc   ;==>_FileCopy
+
+	#Region NAS SCRIPT <<<<<<<<<
+Func nas()
+
+	c("Verifying if there is an existing connection to: >>> NAS-02 <<< ...")
+	If _WinNet_GetConnection($sLocalName) = $sServerShare Then
+		c("Connection aldready existing, skipping this step....")
+	Else
+		iF $sUserName or $sPassword = "CHANGEME" Then
+		MsgBox(0,"", "Username or Password must be changed before attempting to connect NAS.")
+		Exit
+		EndIf
+		c("Attributing letter: " & $letter)
+		$sResult = _WinNet_AddConnection2( $sLocalName, $sServerShare, $sUserName, $sPassword, 1, 2) ;(1,2 = remember connection and user interact on error)
+		c("Connected! Result = " & $sResult)
+		If $sResult Then
+			;USE _FILECOPY HERE TO OBTAIN
+			_WinNet_CancelConnection2($sLocalName)
+		Else
+			c("Connection Failed... Inform WilliamasKumeliukas of this problem please.")
+			Sleep(10 * 1000)
+			Exit
+		EndIf
+	EndIf
+
+EndFunc
+#EndRegion NAS SCRIPT <<<<<<<<
 
 #Region  GUI SCRIPT <<<<<<<< @@@@@@@@@@@@@@@@@@@@
 
@@ -367,37 +494,17 @@ While 1
 			c("Configuration started!")
 			 ; CONFIGURATION PROCESS START HERE @@@@@@@@@@@@@@@@
 
-			; TO DO WHEN EVERYTHING WILL BE TESTED AND WORKING
+			;WILL BE DONE WHEN EVERYTHING WILL BE TESTED AND WORKING
+			_GetSystemInfo()
 
 			 ; CONFIGURATION PROCESS END HERE @@@@@@@@@@@@@@@@@@
 		Case $wus
-
+			 _PopulateNeeded($Host)
 	EndSwitch
 Wend
 
 EndFunc
 #EndRegion GUI <<<<<<<<<<<<<<@@@@@@@@@@@@@
-
-Func _IsChecked($control)
-    Return BitAnd(GUICtrlRead($control),$GUI_CHECKED) = $GUI_CHECKED
-EndFunc
-
- Func Office2010() ;==> TO DO
-
-$officePath = "CHANGEME"
-
- EndFunc
-
- #EndRegion INSTALL OFFICE 2010
-
-
- Func defaultBrowser() ;~ TO DO
-	 ;HKEY_CURRENT_USER\SOFTWARE\RegisteredApplications
-	 ;HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice (ProgId REG_SZ ChromeHTML)
-	 ;
- EndFunc
-
-
 
 	#Region SetComputerName <<<<<<<<
 Func _SetComputerName($sCmpName)
@@ -408,7 +515,7 @@ Func _SetComputerName($sCmpName)
 
     If StringRegExp($sCmpName, '|/|:|*|?|"|<|>|.|,|~|!|@|#|$|%|^|&|(|)|;|{|}|_|=|+|[|]|x60' & "|'", 0) = 1 Then Return 0
 
-    ; 5 = ComputerNamePhysicalDnsHostname
+;~     ; 5 = ComputerNamePhysicalDnsHostname
     $aRet = DllCall("Kernel32.dll", "BOOL", "SetComputerNameEx", "int", 5, "str", $sCmpName)
     If $aRet[0] = 0 Then Return SetError(1, 0, 0)
     RegWrite($sCtrlKey & "ControlComputernameActiveComputername", "ComputerName", "REG_SZ", $sCmpName)
@@ -433,49 +540,306 @@ Func _SetComputerName($sCmpName)
 EndFunc   ;==>_SetComputerName
 #EndRegion SetComputerName <<<<<<<<
 
+Func defaultBrowser()
+	 ;HKEY_CURRENT_USER\SOFTWARE\RegisteredApplications
+	 ;HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice (ProgId REG_SZ ChromeHTML)
+	 ;
+ EndFunc
 
+ #Region 		 INSTALL OFFICE 2010
 
+ Func Office2010() ;==> TO DO
 
+$officePath = "CHANGEME"
 
-#Region SCREENSAVER
-Func ScreenSaver($Alive) ;False to reset / True to prevent/disable sleep/power-savings modes (AND screensaver)
+ EndFunc
 
-	If $Alive = True Then
-		Local $ssKeepAlive = DllCall( 'kernel32.dll', 'long', 'SetThreadExecutionState', 'long', 0x80000003)
-		If @error Then
-			Return SetError( 2, @error, 0x80000000)
-			cw(@error)
-		EndIf
-	Return $ssKeepAlive[0]	; Previous state (typically 0x80000000 [-2147483648])
-		c("Hibernate mode = " & $sSaverActive)
-	ElseIf $Alive = False Then
-		; Flag:	ES_CONTINUOUS (0x80000000) -> (default) -> used alone, it resets timers & allows regular sleep/power-savings mode
-		Local $ssKeepAlive=DllCall('kernel32.dll','long','SetThreadExecutionState','long',0x80000000)
-		If @error Then
-			Return SetError(2,@error,0x80000000)
-			cw(@error)
-		EndIf
-		Return $ssKeepAlive[0]	; Previous state
-		Else
-			cw("")
-	EndIf
+ #EndRegion INSTALL OFFICE 2010
+
+Func _IsChecked($control)
+    Return BitAnd(GUICtrlRead($control),$GUI_CHECKED) = $GUI_CHECKED
 EndFunc
-#EndRegion SCREENSAVER
+
+
+	#Region WINDOWS UPDATE
+
+Func _CreateMsUpdateSession($strhost = @ComputerName)
+	c("Creating a WIndows Update Session...")
+	$objsession = ObjCreate("Microsoft.Update.Session", $strhost)
+	If Not IsObj($objsession) Then Return 0
+	Return $objsession
+EndFunc   ;_CreateMsUpdateSession
+
+Func _CreateSearcher($objsession)
+	c("Creating Searcher Session...")
+	If Not IsObj($objsession) Then Return -1
+	Return $objsession.createupdatesearcher
+EndFunc   ;_CreateSearcher
+
+Func _FetchNeededData($Host)
+	$objsearcher = _CreateSearcher(_CreateMsUpdateSession($Host))
+	$colneeded = _GetNeededUpdates($objsearcher)
+	$objsearcher = 0
+	Dim $arrneeded[1][2]
+	For $i = 0 To $colneeded.updates.count - 1
+		If $i < $colneeded.updates.count - 1 Then ReDim $arrneeded[$i + 2][2]
+		$update = $colneeded.updates.item($i)
+		$arrneeded[$i][0] = $update.title
+		$arrneeded[$i][1] = $update.description
+	Next
+	If Not IsArray($arrneeded) Then
+		cw("Windows Updates Service seems to have encounted a problem with: " & $Host)
+		Return 0
+	EndIf
+	Return $arrneeded
+EndFunc   ;_FetchNeededData
+
+Func _GetNeededUpdates($objsearcher)
+	If Not IsObj($objsearcher) Then Return -5
+	$colneeded = $objsearcher.search("IsInstalled=0 and Type='Software'")
+	Return $colneeded
+EndFunc   ;_GetNeededUpdates
+
+Func _GetTotalHistoryCount($objsearcher)
+	If Not IsObj($objsearcher) Then Return -2
+	Return $objsearcher.gettotalhistorycount
+EndFunc   ;_GetTotalHistoryCount
+
+
+Func _PopulateNeeded($Host)
+
+	GUICtrlSetData($wul,"Searching for updates available...")
+		c("Searching for updates available...")
+	_GUICtrlListView_DeleteAllItems(ControlGetHandle($Gui, "", $wulv))
+	$arrNeeded = _FetchNeededData($Host)
+	GUICtrlSetData($wul,"Retrieving results...")
+	c("Retrieving results...")
+	If IsArray($arrNeeded) And $arrNeeded[0][0] <> "" Then
+		For $i = 0 To UBound($arrNeeded) - 1
+			_GUICtrlListView_AddItem($wulv, $arrNeeded[$i][0])
+			$Dirty = False
+			For $Check = 1 To $BannedList[0]
+				If StringInStr($arrNeeded[$i][0], $BannedList[$Check]) Then $Dirty = True
+			Next
+			If $Dirty == False Then _GUICtrlListView_SetItemSelected($wulv, $i, True)
+		Next
+		$objsearcher = 0
+		$arrNeeded = 0
+
+		_UpdatesDownloadAndInstall()
+	Else
+
+		GUICtrlSetData($wul,"Your windows is up to date.")
+		c("Your Windows is up to date.")
+
+	EndIf
+	GUI()
+EndFunc   ;_PopulateNeeded
 
 
 
+Func _UpdatesDownloadAndInstall()
+
+	$selected = _GUICtrlListView_GetSelectedIndices($wulv, True)
+	If $selected[0] = 0 Then
+
+;~ 		MsgBox(64, "Results", "Your windows seems up to date.",5)
+		c("Results: Your Windows seems up to date.")
+	EndIf
+	$objsearcher = _CreateMsUpdateSession($Host)
+	For $x = 1 To $selected[0]
+		$item = _GUICtrlListView_GetItemText($wulv, $selected[$x])
+		For $i = 0 To $colneeded.updates.count - 1
+			$update = $colneeded.updates.item($i)
+			If $item = $update.title Then
+				GUICtrlSetData($wul, "Downloaded : " & $x-1 & " / Total : " & $selected[0] & " updates")
+				c("Downloaded: " & $x -1 & "  / Total: " & $selected[0] & " updates")
+				Global $calculate = $x-1 / $selected[0] * 100
+				Global $rawpercent = Number($calculate,1)
+				Global $percent = $rawpercent & "%"
+				GUICtrlSetData($wup,$rawpercent)
+;~ 				GUICtrlSetData($UpdatesPercent,$percent)
+				_GUICtrlListView_SetItemText($wulv, $i, "Downloading...", 1)
+				_GUICtrlListView_SetItemFocused($wulv, $i)
+;~ 				_GUICtrlListView_EnsureVisible($wulv, $i)
+				$updatestodownload = ObjCreate("Microsoft.Update.UpdateColl")
+				$updatestodownload.add($update)
+				$downloadsession = $objsearcher.createupdatedownloader()
+				$downloadsession.updates = $updatestodownload
+				$downloadsession.download
+				_GUICtrlListView_SetItemText($wulv, $i, "Ready", 1)
+			EndIf
+		Next
+	Next
+	$rebootneeded = False
+	GUICtrlSetData($wup,"0")
+	c("All updates are downloaded, proceeding to install updates...")
+	For $x = 1 To $selected[0]
+		$item = _GUICtrlListView_GetItemText($wulv, $selected[$x])
+		For $i = 0 To $colneeded.updates.count - 1
+			$update = $colneeded.updates.item($i)
+			If $item = $update.title And $update.isdownloaded Then
+				GUICtrlSetData($wul, "Installed :" & $x-1 & "  / Total :" & $selected[0] & " updates")
+				c("Installed: " & $x -1 & "  / Total: " & $selected[0] & " updates")
+				$calculate = $x-1 / $selected[0] * 100
+				$rawpercent = Number($calculate,1)
+				$percent = $rawpercent & "%"
+				GUICtrlSetData($wup,$rawpercent)
+;~ 				GUICtrlSetData($UpdatesPercent,$percent)
+				_GUICtrlListView_SetItemText($wulv, $i, "Installing...", 1)
+				_GUICtrlListView_SetItemFocused($wulv, $i)
+;~ 				_GUICtrlListView_EnsureVisible($wulv, $i)
+				$installsession = $objsearcher.createupdateinstaller()
+				$updatestoinstall = ObjCreate("Microsoft.Update.UpdateColl")
+				$updatestoinstall.add($update)
+				$installsession.updates = $updatestoinstall
+				$installresult = $installsession.install
+				If $installresult.rebootrequired Then
+					$rebootneeded = True
+				EndIf
+				_GUICtrlListView_SetItemText($wulv, $i, "Success", 1)
+			EndIf
+		Next
+	Next
+	If $rebootneeded Then
+;~ 		MsgBox(64, "Reboot required", "A reboot is required to complete the installations, Rebooting in 10 seconds.", 10)
+		c("A reboot is required to finish installing updates, ")
+;~ 		Shutdown(2 + 4 + 16)
+	Else
+		_GUICtrlListView_DeleteAllItems($wulv)
+		_PopulateNeeded($Host)
+	EndIf
+	GUICtrlSetData($wup, "0")
+	$downloadsession = 0
+	$updatestodownload = 0
+	Return 0
+
+EndFunc   ;_UpdatesDownloadAndInstall
+
+	#EndRegion WINDOWS UPDATE
 
 
-Func _FileCopy($sRemoteName, $d)
-	Local $FOF_RESPOND_YES = 16
-	Local $FOF_SIMPLEPROGRESS = 256
-	$oShell = ObjCreate("shell.application")
-	$oShell.namespace($d).CopyHere($sRemoteName,$FOF_SIMPLEPROGRESS)
-EndFunc   ;==>_FileCopy
 
+	Func _GetSystemInfo()
+	Local $sReturn = "OK"
+
+	; OS
+	Dim $Obj_WMIService = ObjGet("winmgmts:\\" & "localhost" & "\root\cimv2")
+	Dim $Obj_Services = $Obj_WMIService.ExecQuery("Select * from Win32_OperatingSystem")
+	Local $Obj_Item
+	For $Obj_Item In $Obj_Services
+		$sInfos &= " OS : " & $Obj_Item.Caption & " " & @OSArch & " version " & $Obj_Item.Version & @CRLF
+	Next
+
+	; Computer
+	Dim $Obj_Services = $Obj_WMIService.ExecQuery("Select * from Win32_ComputerSystem")
+	Local $Obj_Item
+	For $Obj_Item In $Obj_Services
+		$sInfos &= " Manufacturer : " & $Obj_Item.Manufacturer & @CRLF
+		$sInfos &= " Model : " & $Obj_Item.Model & @CRLF
+		$sInfos &= " RAM : " & Round((($Obj_Item.TotalPhysicalMemory / 1024) / 1024), 0) & " Mo" & @CRLF
+	Next
+
+	; Processor
+	Dim $Obj_Services = $Obj_WMIService.ExecQuery("Select * from Win32_Processor")
+	Local $Obj_Item
+	For $Obj_Item In $Obj_Services
+		$sInfos &= " CPU: " & $Obj_Item.Name & @CRLF
+		$sInfos &= " Socket : " & $Obj_Item.SocketDesignation & @CRLF
+	Next
+
+	; Graphic card
+	Dim $Obj_Services = $Obj_WMIService.ExecQuery("Select * from Win32_VideoController")
+	Local $Obj_Item
+	For $Obj_Item In $Obj_Services
+		$sInfos &= " Graphic card : " &$Obj_Item.Name & @CRLF &  @CRLF
+	Next
+
+	; HDD
+	Dim $Obj_Services = $Obj_WMIService.ExecQuery("Select * from Win32_DiskDrive")
+	Local $Obj_Item
+	For $Obj_Item In $Obj_Services
+		if $Obj_Item.MediaType = "Fixed hard disk media" Then
+			$sInfos &= " HDD " & $Obj_Item.Index & " : " & $Obj_Item.Model & " - " & Round($Obj_Item.Size / 1000000000, 0) & " Go - Status " & $Obj_Item.Status & @CRLF
+			If $Obj_Item.Status <> "OK" Then
+				$sReturn = "HDD SMART Results " & $Obj_Item.Index & "  : " & $Obj_Item.Status
+			EndIf
+		EndIf
+	Next
+
+GUICtrlSetData($iEdit, $sInfos )
+
+	Return $sReturn
+EndFunc
+
+Func _GetSmart()
+
+	Dim $Obj_WMIService = ObjGet("winmgmts:\\" & "localhost" & "\root\wmi")
+		Dim $Obj_Services = $Obj_WMIService.ExecQuery("Select * from MSStorageDriver_FailurePredictData")
+		Local $Obj_Item
+		Local $aSmart
+		Local $aSmartAttribute[]
+		Local $i
+		Local $bReturn = False
+		Local $aHDDname[2]
+		Local $sHDDname
+
+		; List of important SMART values :
+		; ID = 1 Rate of errors with read failures
+		; ID = 5 Number of allocated sectors Nombre de secteur réalloués
+		; ID = 9 Hours of being active
+		; ID = 12 Number of boot
+		; ID = 194 HDD temperature
+		; ID = 197  unstable sectors  count
+		; ID = 198  uncorrectable sectors count
+
+
+		For $Obj_Item In $Obj_Services
+
+			Local $aSmartFound = [5,9,12,194,197,198]
+			Local $sMax
+			Local $sPos
+			Local $sMax
+
+			if IsArray($Obj_Item.VendorSpecific) Then
+				$bReturn = True
+				$aHDDname = StringRegExp($Obj_Item.InstanceName, 'Ven_(.*)&Prod_(.*)\\',3)
+				If(IsArray($aHDDname) And UBound($aHDDname) = 2) Then
+					$sHDDname = $aHDDname[0] & " " & $aHDDname[1]
+				Else
+					$aHDDname = StringRegExp($Obj_Item.InstanceName, 'Disk([A-Za-z0-9]*)',3)
+					If(IsArray($aHDDname)) Then
+						$sHDDname = $aHDDname[0]
+					Else
+						$sHDDname = "Undefined"
+					EndIf
+				EndIf
+
+				$aSmart = $Obj_Item.VendorSpecific
+
+				$sMax = UBound($aSmart) - 1
+				For $i=2 To $sMax Step 12
+					If _ArrayBinarySearch($aSmartFound, $aSmart[$i]) <> -1 Then
+						_ArrayDelete($aSmartFound, "0;" & $aSmart[$i])
+						if($aSmart[$i]=9 Or $aSmart[$i]=12) Then
+							; calcul POH
+							$aSmartAttribute[$aSmart[$i]]=$aSmart[$i+6] * 256 + $aSmart[$i+5]
+						Else
+							$aSmartAttribute[$aSmart[$i]]=$aSmart[$i+5]
+						EndIf
+
+					EndIf
+				Next
+			EndIf
+
+			$aResults[$sHDDname]=$aSmartAttribute
+		Next
+
+	Return $bReturn
+
+EndFunc
 
 Func _Exit()
 
-	Exit
-
+Exit
 EndFunc
