@@ -2,7 +2,7 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=Icon\gear.ico
 #AutoIt3Wrapper_Outfile=W10Configurator.exe
-#AutoIt3Wrapper_Res_Fileversion=0.0.0.1
+#AutoIt3Wrapper_Res_Fileversion=0.2.4.50
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_ProductName=W10Configurator
 #AutoIt3Wrapper_Res_Language=1033
@@ -11,7 +11,7 @@
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
 ;*****************************************
-;W10Configurator.au3 by Williamas Kumeliukas
+;*  W10Configurator.au3 by Williamas Kumeliukas  *
 ;*****************************************
 
 #REGION Includes <<<<<<<<
@@ -40,10 +40,15 @@
 #include <Process.au3>
 #include <EventLog.au3>
 #include <APIDiagConstants.au3>
-#EndRegion
-HotKeySet("{NUMPAD0}", "_Exit")
+#EndRegion Includes <<<<<<
+
 Opt("GUIResizeMode", $GUI_DOCKAUTO)
-#REGION VARIABLES <<<<<<<<<<<<<@@@@@@@@@@@@@@@@@@@@@@
+
+HotKeySet("{NUMPAD0}", "_Exit")
+
+
+
+#REGION DECLARE VARIABLES  FOR LATER USE
 Global $ConfigDir =  @ScriptDir ;temporary
 Global $nas, $cw, $cwe,  $c, $cmdfile, $nas, $sRemoteName
 Global $regPath = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation", $GUI
@@ -75,7 +80,7 @@ Global $Host = @ComputerName
 Global $BannedList = StringSplit("Silverlight", "|")
 Global $label[10]
 Global $task[15]
-#EndRegion VARIABLES
+#EndRegion DECLARE VARIABLES FOR LATER USE
 
 
 GUI()
@@ -128,14 +133,6 @@ EndFunc
 #EndRegion INI READ/WRITE
 
 Func selfoem() ;**** AutoIt version of oem() ****
-#Region InputBox ;Temporary
-;~ 	$OEMLogo = FileOpenDialog("Choose your OEM Logo", @DesktopDir, "*.bmp")
-;~ 	$Manufacturer = InputBox("OEM", "Type the Manufacturer below")
-;~ 	$Model = InputBox("OEM", "Type the computer model below", $manufacturer)
-;~ 	$supportHours = InputBox("OEM", "Type Support Hours below")
-;~ 	$supportPhone = InputBox("OEM", "Type the Support Phone below")
-;~ 	$supportUrl = InputBox("OEM", "Type the Support Website below","https://")
-#EndRegion InputBox ;Temporary
 	c("OEM installation started !")
 	sleep(500)
 	c("Installing OEM Logo...")
@@ -157,7 +154,7 @@ Func selfoem() ;**** AutoIt version of oem() ****
 EndFunc 	   ;**** AutoIt version of oem() ****
 
 
-#Region RZGET <<<  (working flawless)
+#Region RZGET <<<  Work flawless (RZGet is another solution like Ninite which offers a variety of softwares to download & install)
 Func Rzget()
     Local $rzcmd
 
@@ -176,10 +173,10 @@ Func Rzget()
 		& 'exit /b' & @CRLF _
 		& ':run' & @CRLF _
 		& 'cmd /c ' & $ConfigDir & '\rzget.exe install "Google Chrome"' & @CRLF _
-		 & 'rzget.exe install "7-zip"' & @CRLF _
-		 & 'rzget.exe install "AdobeReader DC"' &  @CRLF _
-		 & 'rzget.exe install "Edge"' & @CRLF _
-		 & 'echo done.' & @CRLF _
+		& 'rzget.exe install "7-zip"' & @CRLF _
+		& 'rzget.exe install "AdobeReader DC"' &  @CRLF _
+		& 'rzget.exe install "Edge"' & @CRLF _
+		& 'echo done.' & @CRLF _
 		& 'exit /b' & @CRLF _
 		& ':UACPrompt' & @CRLF _
 		& 'echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"' & @CRLF _
@@ -201,7 +198,7 @@ EndFunc
 #EndRegion RZGET <<< (working flawless)
 
 #Region SCREENSAVER
-Func ScreenSaver($Alive) ;False to reset / True to prevent/disable sleep/power-savings modes (AND screensaver)
+Func ScreenSaver($Alive) ;False = reset to default & True to prevent/disable sleep/power-savings modes (AND screensaver)
 
 	If $Alive = True Then
 		Local $ssKeepAlive = DllCall( 'kernel32.dll', 'long', 'SetThreadExecutionState', 'long', 0x80000003)
