@@ -639,7 +639,7 @@ Func _UpdatesDownloadAndInstall()
 	$selected = _GUICtrlListView_GetSelectedIndices($wulv, True)
 	If $selected[0] = 0 Then
 		c("Results: Your Windows seems up to date.")
-
+		Return 0
 	EndIf
 	$objsearcher = _CreateMsUpdateSession($Host)
 	For $x = 1 To $selected[0]
