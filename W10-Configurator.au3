@@ -628,7 +628,7 @@ Func _PopulateNeeded($Host)
 
 		GUICtrlSetData($wul,"Your windows is up to date.")
 		c("Your Windows is up to date.")
-
+		Return 0
 	EndIf
 EndFunc   ;_PopulateNeeded
 
@@ -647,9 +647,9 @@ Func _UpdatesDownloadAndInstall()
 		For $i = 0 To $colneeded.updates.count - 1
 			$update = $colneeded.updates.item($i)
 			If $item = $update.title Then
-				GUICtrlSetData($wul, "Downloaded : " & $x-1 & " / Total : " & $selected[0] & " updates")
-				c("Downloaded: " & $x -1 & "  / Total: " & $selected[0] & " updates")
-				Global $calculate = $x-1 / $selected[0] * 100
+				GUICtrlSetData($wul, "Downloaded : " & $x & " / Total : " & $selected[0] & " updates")
+				c("Downloaded: " & $x & "  / Total: " & $selected[0] & " updates")
+				Global $calculate = $x / $selected[0] * 100
 				Global $rawpercent = Number($calculate,1)
 				Global $percent = $rawpercent & "%"
 				GUICtrlSetData($wup,$rawpercent)
@@ -674,9 +674,9 @@ Func _UpdatesDownloadAndInstall()
 		For $i = 0 To $colneeded.updates.count - 1
 			$update = $colneeded.updates.item($i)
 			If $item = $update.title And $update.isdownloaded Then
-				GUICtrlSetData($wul, "Installed :" & $x-1 & "  / Total :" & $selected[0] & " updates")
-				c("Installed: " & $x -1 & "  / Total: " & $selected[0] & " updates")
-				$calculate = $x-1 / $selected[0] * 100
+				GUICtrlSetData($wul, "Installed :" & $x & "  / Total :" & $selected[0] & " updates")
+				c("Installed: " & $x & "  / Total: " & $selected[0] & " updates")
+				$calculate = $x / $selected[0] * 100
 				$rawpercent = Number($calculate,1)
 				$percent = $rawpercent & "%"
 				GUICtrlSetData($wup,$rawpercent)
