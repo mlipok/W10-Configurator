@@ -162,7 +162,7 @@ Func Rzget()
     Local $rzcmd
 
 	If FileExists($ConfigDir & "\rzget.exe") Then ; IF RZGET IS IN CONFIG FOLDER @@@@
-		call(_CheckRZGetVersion())
+		_CheckRZGetVersion()
 		$rzcmd = '@echo off' & @CRLF _
 		& 'call :isAdmin' & @CRLF _
 		& 'if %errorlevel% == 0 (' & @CRLF _
