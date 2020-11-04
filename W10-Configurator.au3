@@ -77,7 +77,8 @@ Global $sResult, $aResults, $sSaverActive
 Global $syspin = "syspin.exe"
 Global $ColNeeded
 Global $Host = @ComputerName
-Global $BannedList = StringSplit("Silverlight", "|")
+Global $sBannedList
+Global $BannedList 
 Global $label[10]
 Global $task[15]
 #EndRegion DECLARE VARIABLES FOR LATER USE
@@ -365,10 +366,15 @@ GUICtrlSetBkColor(-1, $color_black)
 GUICtrlSetColor(-1, 0x75EE3B)
  GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 
- $label[7] = GUICtrlCreateLabel("Search not started yet",97,62, -1 , 15, $SS_LEFTNOWORDWRAP)
+ $label[7] = GUICtrlCreateLabel("Search not started yet",16,170, 150 , 15, $SS_LEFTNOWORDWRAP)
  GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUICtrlSetResizing($label[7], $GUI_DOCKAUTO)
- $wup = GUICtrlCreateProgress(37,142,621,20,-1,-1)
+ $wup = GUICtrlCreateProgress(16,142,649,20,-1,-1)
+ GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
+ GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
+
+ $label[8] = GUICtrlCreateInput("", 16,90, 300, 40) ;User defined additions to banned list
+ GUICtrlCreateLabel("Use the below box to exclude updates from being applied: (ex. Silverlight)", 16,55,310,40)
  GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 
@@ -602,6 +608,14 @@ Func _GetTotalHistoryCount($objsearcher)
 	Return $objsearcher.gettotalhistorycount
 EndFunc   ;_GetTotalHistoryCount
 
+Func _UserBannedList()
+	$sBannedList = GUICtrlRead($label[8]) ;Read what is input into text box
+	If $sBannedList = "" Then
+			$BannedList = StringSplit("Silverlight", ", ", $STR_ENTIRESPLIT) ;Just stick with Silverlight
+		Else
+			$BannedList = StringSplit("Silverlight, " & $sBannedList, ", ", $STR_ENTIRESPLIT) ;Use Silverlight and whatever else is in the text box
+		EndIf
+EndFunc ;Create Banned list
 
 Func _PopulateNeeded($Host)
 
@@ -614,6 +628,7 @@ Func _PopulateNeeded($Host)
 	If IsArray($arrNeeded) And $arrNeeded[0][0] <> "" Then
 		For $i = 0 To UBound($arrNeeded) - 1
 			_GUICtrlListView_AddItem($wulv, $arrNeeded[$i][0])
+			Call(_UserBannedList)
 			$Dirty = False
 			For $Check = 1 To $BannedList[0]
 				If StringInStr($arrNeeded[$i][0], $BannedList[$Check]) Then $Dirty = True
