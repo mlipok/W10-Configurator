@@ -81,6 +81,8 @@ Global $sBannedList
 Global $BannedList 
 Global $label[10]
 Global $task[15]
+Global $sRZVersion ;Local RZGet Version
+Global $sORZVersion ;Online RZGet Version
 #EndRegion DECLARE VARIABLES FOR LATER USE
 
 
@@ -160,6 +162,7 @@ Func Rzget()
     Local $rzcmd
 
 	If FileExists($ConfigDir & "\rzget.exe") Then ; IF RZGET IS IN CONFIG FOLDER @@@@
+		call(_CheckRZGetVersion())
 		$rzcmd = '@echo off' & @CRLF _
 		& 'call :isAdmin' & @CRLF _
 		& 'if %errorlevel% == 0 (' & @CRLF _
@@ -195,6 +198,31 @@ Func Rzget()
     ShellExecute($ConfigDir &  "\rzget.bat")
     c("Done !")
 
+EndFunc
+
+Func _GetOnlineRZVersion()
+	local $Powershell = Run("powershell -Command (((curl 'https://ruckzuck.tools' -Usebasicparsing).Links | Select href)| Select-String -Pattern 'RZGet.exe')", @SystemDir, @SW_HIDE, $STDOUT_CHILD + $STDERR_CHILD)
+	$sORZVersion = ""
+	While 1
+		$sORZVersion &= StdoutRead($Powershell)
+		if @error Then ExitLoop
+	WEnd
+	$sORZVersion = StringReplace(StringTrimRight(StringTrimLeft($sORZVersion,63),6),"/RZGet.exe}","")
+	c("Online Version of RZGet is: " & $sORZVersion)
+EndFunc
+
+Func _CheckRZGetVersion()
+	$sRZVersion = FileGetVersion( @ScriptDir & "\Ressources\Rzget.exe")
+	c("Local Version of RZGet is: " & $sRZVersion)
+	consolewrite("Local Verson of RZGet is: " & $sRZVersion)
+	Call(_GetOnlineRZVersion)
+	consolewrite("Online Verson of RZGet is: " & $sORZVersion)
+	If $sORZVersion <> $sRZVersion Then
+		c("Updating RZGet Version")
+		InetGet("https://github.com/rzander/ruckzuck/releases/download/" & $sORZVersion & "/Rzget.exe", @ScriptDir & "\Ressources\Rzget.exe",2,0)
+	Else
+		c("RZGet is up to date.")
+	EndIf
 EndFunc
 #EndRegion RZGET <<< (working flawless)
 
