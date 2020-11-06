@@ -136,8 +136,7 @@ EndFunc
 #EndRegion INI READ/WRITE
 
 Func selfoem() ;**** AutoIt version of oem() ****
-	c("OEM installation started !")
-	sleep(500)
+	c("" & @CRLF & "OEM installation started !")
 	c("Installing OEM Logo...")
 	_FileCopy($OEMLogo, "C:\Windows\System32")
 	RegWrite( $regPath, "Manufacturer", "REG_SZ", $Manufacturer )
@@ -151,7 +150,6 @@ Func selfoem() ;**** AutoIt version of oem() ****
 	c("Added SupportPhone registry key...")
 	RegWrite($regPath, "SupportURL", "REG_SZ", "https://" & $supportUrl)
 	c("Added SupportURL registry key...")
-	sleep(500)
 	c("OEM installation done !")
 
 EndFunc 	   ;**** AutoIt version of oem() ****
@@ -300,7 +298,7 @@ GUICtrlCreateGraphic(705, 45, 300, 455, BitOR($GUI_SS_DEFAULT_GRAPHIC,$SS_WHITEF
 GUICtrlSetColor(-1, 0x000000)
 GUICtrlSetBkColor(-1, 0xFFFFFF)
 GUICtrlSetGraphic(-1, $GUI_GR_COLOR, 0x000000, 0xFFFFFF)
-$task[1] =  GuiCtrlCreateCheckbox("Windows Updates", 710, 48, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+$task[1] =  GuiCtrlCreateCheckbox("Windows Updater", 710, 48, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
 	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
  	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
@@ -364,32 +362,29 @@ $label[0] = GUICtrlCreateLabel("Select tasks to do:",780,23,150,18,$SS_CENTER,-1
 
  GUISwitch($GUI,_GUICtrlTab_SetCurFocus($tab,1)&GUICtrlRead ($tab, 1))
 
-$Go = GUICtrlCreateButton("Start", 600, 480, 80, 30, BitOR($BS_DEFPUSHBUTTON, $BS_CENTER))
-	GUICtrlSetFont(-1,10,600,0,"Lucida Bright", 5)
-	GUICtrlSetResizing($Go,$GUI_DOCKAUTO)
 
- $label[1] = GUICtrlCreateLabel("Manufacturer:",107,52, 105, -1)
+ $label[1] = GUICtrlCreateLabel("Manufacturer:",107,52, 95)
  GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUICtrlSetResizing($label[1], $GUI_DOCKAUTO)
  $Manufacturer = GUICtrlCreateInput("",201,52,222,20,-1,$WS_EX_CLIENTEDGE)
 GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 
- $label[2] = GUICtrlCreateLabel("Model:",153,134, 105)
+ $label[2] = GUICtrlCreateLabel("Model:",153,134)
  GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUICtrlSetResizing($label[2],$GUI_DOCKAUTO)
  $model = GUICtrlCreateInput("",201,132,222,20,-1,$WS_EX_CLIENTEDGE)
  GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 
- $label[3] = GUICtrlCreateLabel("Support Hours:", 100,194, 110, -1)
+ $label[3] = GUICtrlCreateLabel("Support Hours:", 100,194, 95)
  GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
  $supportHours = GUICtrlCreateInput("",201,192,218,20,-1,$WS_EX_CLIENTEDGE)
  GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 
-  $label[4] = GUICtrlCreateLabel("Support Website:",86,256,130,15,-1,-1)
+  $label[4] = GUICtrlCreateLabel("Support Website:",86,256,110)
  GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
  $supportUrl = GUICtrlCreateInput("https://",201,255,222,20,-1,$WS_EX_CLIENTEDGE)
@@ -399,7 +394,7 @@ GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  $OEMLogo = GUICtrlCreateInput("",201,319,222,20,-1,$WS_EX_CLIENTEDGE)
  GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
- $label[5] = GUICtrlCreateLabel("Logo:",159,321,101,15,-1,-1)
+ $label[5] = GUICtrlCreateLabel("Logo:",159,321,101)
  GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
  $oemfile = GUICtrlCreateButton("...",440,319,44,24,-1,-1)
@@ -416,6 +411,8 @@ GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUISwitch($GUI,_GUICtrlTab_SetCurFocus($tab,0)&GUICtrlRead ($tab, 1))
 
  Global $iEdit = GUICtrlCreateEdit( "", 5, 25, 677, 481, BitOR( $ES_AUTOVSCROLL, $ES_READONLY, $ES_MULTILINE, $ES_UPPERCASE, $WS_VSCROLL, $WS_HSCROLL ), -1 )
+
+_GetSystemInfo()
 
  GUISwitch($GUI,_GUICtrlTab_SetCurFocus($tab,2)&GUICtrlRead ($tab, 1))
 
@@ -524,16 +521,20 @@ While 1
 			Endif
 			c("All tasks are completed!")
 
-		Case $Go
-			c("Configuration started!")
+;~ 		Case $Go
+;~ 			c("Configuration started!")
 			 ; CONFIGURATION PROCESS START HERE @@@@@@@@@@@@@@@@
 
 			;WILL BE DONE WHEN EVERYTHING WILL BE TESTED AND WORKING
-			_GetSystemInfo()
+
 
 			 ; CONFIGURATION PROCESS END HERE @@@@@@@@@@@@@@@@@@
 		Case $wus
 			 _PopulateNeeded($Host)
+
+		 Case $oemfile
+			 $cLogo = FileOpenDialog(@ScriptName, @DesktopDir, "BMP files (*.bmp)", $FD_FILEMUSTEXIST)
+			GUICtrlSetData($OEMLogo, $cLogo)
 	EndSwitch
 Wend
 
@@ -735,6 +736,7 @@ EndFunc ;Create Banned list
 Func _PopulateNeeded($Host)
 
 	GUICtrlSetData($wul,"Searching for updates available...")
+	GUICtrlSetData($label[7], "Searching for available updates...")
 		c("Searching for updates available...")
 	_GUICtrlListView_DeleteAllItems(ControlGetHandle($Gui, "", $wulv))
 	$arrNeeded = _FetchNeededData($Host)
@@ -756,7 +758,7 @@ Func _PopulateNeeded($Host)
 
 	Else
 		GUICtrlSetData($wup,"0")
-		GUICtrlSetData($label[7] ,"0%")
+		GUICtrlSetData($label[7] ,"Search not started yet.")
 		GUICtrlSetData($wul,"Your windows is up to date.")
 		c("Your Windows is up to date.")
 		Return 0
@@ -771,7 +773,7 @@ Func _UpdatesDownloadAndInstall()
 	If $selected[0] = 0 Then
 		c("Results: Your Windows seems up to date.")
 		GUICtrlSetData($wup,"0")
-		GUICtrlSetData($label[7] ,"0%")
+		GUICtrlSetData($label[7] ,"Search not started yet.")
 		Return 0
 	EndIf
 	$objsearcher = _CreateMsUpdateSession($Host)
@@ -840,10 +842,12 @@ Func _UpdatesDownloadAndInstall()
 		c("No reboot required, establishing a new Windows Updates Session...")
 		_GUICtrlListView_DeleteAllItems($wulv)
 		GUICtrlSetData($wup, "0")
-		GUICtrlSetData($label[7], "0%")
+		GUICtrlSetData($label[7], "Search not started yet.")
 		_PopulateNeeded($Host)
 	EndIf
 	c("Your Windows seems up to date.")
+	GUICtrlSetData($wup, "0")
+		GUICtrlSetData($label[7], "Search not started yet.")
 	$downloadsession = 0
 	$updatestodownload = 0
 	Return 0
