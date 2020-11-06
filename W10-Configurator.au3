@@ -213,10 +213,7 @@ EndFunc
 
 Func _CheckRZGetVersion()
 	$sRZVersion = FileGetVersion( @ScriptDir & "\Ressources\Rzget.exe")
-	c("Local Version of RZGet is: " & $sRZVersion)
-	consolewrite("Local Verson of RZGet is: " & $sRZVersion)
 	Call(_GetOnlineRZVersion)
-	consolewrite("Online Verson of RZGet is: " & $sORZVersion)
 	If $sORZVersion <> $sRZVersion Then
 		c("Updating RZGet Version")
 		InetGet("https://github.com/rzander/ruckzuck/releases/download/" & $sORZVersion & "/Rzget.exe", @ScriptDir & "\Ressources\Rzget.exe",2,0)
@@ -298,19 +295,57 @@ Func GUI()
 _GUICtrlTab_SetCurFocus($tab,-1)
 GUICtrlSetResizing(-1,70)
 
- $tree = GUICtrlCreateTreeView(700,60,318,481,BitOR($TVS_SINGLEEXPAND, $TVS_SHOWSELALWAYS,$TVS_FULLROWSELECT, $TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES,$TVS_TRACKSELECT),$WS_EX_CLIENTEDGE);225,10,180,331
-	GUICtrlSetFont(-1,15,400,0,"Lucida Bright")
-	 $task[1] = GUICtrlCreateTreeViewItem("Windows Updates", $tree)
-	 $task[2] = GUICtrlCreateTreeViewItem("rzget", $tree)
-	 $task[3] = GUICtrlCreateTreeViewItem("Default = Chrome", $tree)
-	 $task[4] = GUICtrlCreateTreeViewItem(".pdf/pdfxml = Reader", $tree)
-	 $task[5] = GUICtrlCreateTreeViewItem("Install OEM + Logo", $tree)
-	 $task[6] = GUICtrlCreateTreeViewItem("Disable hibernation", $tree)
-	 $task[7] = GUICtrlCreateTreeViewItem("Add Office 2010 to C:\", $tree)
-	 $task[8] = GUICtrlCreateTreeViewItem("Install Office 2010", $tree)
-	 $task[9] = GUICtrlCreateTreeViewItem("ComputerName", $tree)
-	 $task[10] = GUICtrlCreateTreeViewItem("Add Office icons to taskbar", $tree)
-	 $task[11] = GUICtrlCreateTreeViewItem("Select All", $tree)
+;GUI setup for Tasks
+GUICtrlCreateGraphic(705, 45, 300, 455, BitOR($GUI_SS_DEFAULT_GRAPHIC,$SS_WHITEFRAME,$WS_BORDER))
+GUICtrlSetColor(-1, 0x000000)
+GUICtrlSetBkColor(-1, 0xFFFFFF)
+GUICtrlSetGraphic(-1, $GUI_GR_COLOR, 0x000000, 0xFFFFFF)
+$task1 =  GuiCtrlCreateCheckbox("Windows Updates", 710, 48, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
+ 	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
+	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
+$task2 =  GuiCtrlCreateCheckbox("rzget", 710, 70, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
+ 	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
+	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
+$task3 =  GuiCtrlCreateCheckbox("Default = Chrome", 710, 92, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
+ 	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
+	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
+$task4 =  GuiCtrlCreateCheckbox(".pdf/pdfxml = Reader", 710, 114, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
+ 	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
+	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
+$task5 =  GuiCtrlCreateCheckbox("Install OEM + Logo", 710, 136, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
+ 	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
+	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
+$task6 =  GuiCtrlCreateCheckbox("Disable hibernation", 710, 158, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
+ 	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
+	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
+$task7 =  GuiCtrlCreateCheckbox("Add Office 2010 to C:\", 710, 180, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
+ 	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
+	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
+$task8 =  GuiCtrlCreateCheckbox("Install Office 2010", 710, 202, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
+ 	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
+	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
+$task9 =  GuiCtrlCreateCheckbox("ComputerName", 710, 224, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
+ 	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
+	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
+$task10 = GuiCtrlCreateCheckbox("Add Office icons to taskbar", 710, 246, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
+ 	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
+	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
+$task11 = GuiCtrlCreateCheckbox("Select All", 710, 268, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
+ 	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
+	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
+
+	$sRunTasks = GUICtrlCreateButton("Run", 910, 510, 80, 30)
 
 $Console = _GUICtrlRichEdit_Create($GUI, "",0,559,1043,258, BitOR($ES_MULTILINE,$WS_VSCROLL,$ES_AUTOVSCROLL));9, 364, 719, 258
 	_GUICtrlRichEdit_SetEventMask($Console,$ENM_LINK )
@@ -321,7 +356,7 @@ $Console = _GUICtrlRichEdit_Create($GUI, "",0,559,1043,258, BitOR($ES_MULTILINE,
 	_GUICtrlRichEdit_HideSelection($Console,True)
 	_GUICtrlRichEdit_SetFont($Console, 12, "Consolas")
 
-$label[0] = GUICtrlCreateLabel("Select tasks to do:",730,20,254,26,$SS_CENTER,-1)
+$label[0] = GUICtrlCreateLabel("Select tasks to do:",780,23,150,18,$SS_CENTER,-1)
  GUICtrlSetFont(-1,12,800,0,"Lucida Bright", 5)
  GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 
@@ -432,95 +467,74 @@ While 1
 		Case $GUI_EVENT_CLOSE
 			Exit
 
-		Case $task[11]
-			If BitAND(GUICtrlRead($task[11]), $GUI_CHECKED) Then
-
-				$task[0] = "10"
-				c(StringLen($cwe))
-				_ArrayDisplay($task)
-				For $count = 1 To $task[0] Step 1
-				GUICtrlSetState($task[$count], $GUI_CHECKED)
-				Next
-				c("All tasks are checked.")
-				Else
-
-				For $count = 1 To $task[0] Step 1
-				GUICtrlSetState($task[$count], $GUI_UNCHECKED)
-				Next
-				cw("All tasks are unchecked.")
-
+		Case $task11
+			If GUICtrlRead($task11) == $GUI_CHECKED Then
+				GUICtrlSetState($task1, $GUI_Checked)
+				GUICtrlSetState($task2, $GUI_Checked)
+				GUICtrlSetState($task3, $GUI_Checked)
+				GUICtrlSetState($task4, $GUI_Checked)
+				GUICtrlSetState($task5, $GUI_Checked)
+				GUICtrlSetState($task6, $GUI_Checked)
+				GUICtrlSetState($task7, $GUI_Checked)
+				GUICtrlSetState($task8, $GUI_Checked)
+				GUICtrlSetState($task9, $GUI_Checked)
+				GUICtrlSetState($task10, $GUI_Checked)
+			ElseIf GUICtrlRead($task11) == $GUI_UNCHECKED Then
+				GUICtrlSetState($task1, $GUI_UnChecked)
+				GUICtrlSetState($task2, $GUI_UnChecked)
+				GUICtrlSetState($task3, $GUI_UnChecked)
+				GUICtrlSetState($task4, $GUI_UnChecked)
+				GUICtrlSetState($task5, $GUI_UnChecked)
+				GUICtrlSetState($task6, $GUI_UnChecked)
+				GUICtrlSetState($task7, $GUI_UnChecked)
+				GUICtrlSetState($task8, $GUI_UnChecked)
+				GUICtrlSetState($task9, $GUI_UnChecked)
+				GUICtrlSetState($task10, $GUI_UnChecked)
 			EndIf
-
-		Case $task[1]
-			If BitAND(GUICtrlRead($task[1]), $GUI_CHECKED) Then
-				c("Task is checked: " & GUICtrlRead($task[1], 1))
-			Else
-				c("Task is unchecked: " & GUICtrlRead($task[1], 1))
-			EndIf
-
-		Case $task[2]
-			If BitAND(GUICtrlRead($task[2] ), $GUI_CHECKED) Then
-				c("Task is checked: " & GUICtrlRead($task[2] , 1))
-			Else
-				c("Task is unchecked: " & GUICtrlRead($task[2], 1) )
-			EndIf
-
-		Case $task[3]
-			If BitAND(GUICtrlRead($task[3] ), $GUI_CHECKED) Then
-				c("Task is checked: " & GUICtrlRead($task[3], 1) )
-			Else
-				c("Task is unchecked: " & GUICtrlRead($task[3], 1) )
-			EndIf
-
-		Case $task[4]
-			If BitAND(GUICtrlRead($task[4] ), $GUI_CHECKED) Then
-				c("Task is checked: " & GUICtrlRead($task[4], 1) )
-			Else
-				c("Task is unchecked: " & GUICtrlRead($task[4], 1) )
-			EndIf
-
-		Case $task[5]
-			If BitAND(GUICtrlRead($task[5]), $GUI_CHECKED) Then
-				c("Task is checked: " & GUICtrlRead($task[5], 1) )
-			Else
-				c("Task is unchecked: " & GUICtrlRead($task[5] , 1))
-			EndIf
-
-		Case $task[6]
-			If BitAND(GUICtrlRead($task[6] ), $GUI_CHECKED) Then
-				c("Task is checked: " & GUICtrlRead($task[6] , 1))
-			Else
-				c("Task is unchecked: " & GUICtrlRead($task[6], 1) )
-			EndIf
-
-		Case $task[7]
-			If BitAND(GUICtrlRead($task[7]), $GUI_CHECKED) Then
-				c("Task is checked: " & GUICtrlRead($task[7], 1))
-			Else
-				c("Task is unchecked: " & GUICtrlRead($task[7], 1))
-			EndIf
-
-		Case $task[8]
-			If BitAND(GUICtrlRead($task[8]), $GUI_CHECKED) Then
-				c("Task is checked: " & GUICtrlread($task[8], 1))
-			Else
-				c("Task is unchecked: " & GUICtrlRead($task[8], 1))
-			EndIf
-
-		Case $task[9]
-			If BitAND(GUICtrlRead($task[9]), $GUI_CHECKED) Then
-				c("Task is checked: " & GUICtrlRead($task[9], 1) )
-			Else
-				c("Task is unchecked: " & GUICtrlRead($task[9], 1) )
-			EndIf
-
-		Case $task[10]
-			If BitAND(GUICtrlRead($task[10]), $GUI_CHECKED) Then
-				c("Task is checked: " & GUICtrlRead($task[10], 1) )
-			Else
-				c("Task is unchecked: " & GUICtrlRead($task[10], 1) )
-			EndIf
-
+		Case $sRunTasks
+			c("Running Tasks")
+			If GUICtrlRead($Task1) == $GUI_Checked Then
+				c("Running Windows Updates Task")
+				_PopulateNeeded($Host)
+			Endif
+			If GUICtrlRead($Task2) == $GUI_Checked Then
+				c("Running RZGet")
+				Rzget()
+			EndIF
+			If GUICtrlRead($Task3) == $GUI_Checked Then
+				c("Setting Chrome as default browser")
+				defaultBrowser()
+			EndIF
+			If GUICtrlRead($Task4) == $GUI_Checked Then
+				c("Setting .PDF and .PDFXML to Adobe Reader")
+				Sleep(10000)
+			EndIF
+			If GUICtrlRead($task5) == $GUI_Checked Then
+				c("Installing OEM + Logo")
+				selfoem()
+			EndIF
+			If GUICtrlRead($Task6) == $GUI_Checked Then
+				c("Disabling Hibernation")
+				;ScreenSaver()
+			EndIF
+			If GUICtrlRead($Task7) == $GUI_Checked Then
+				c("Adding office 2010 to C:\")
+				sleep(10000)
+			EndIF
+			If GUICtrlRead($Task8) == $GUI_Checked Then
+				c("Installing MS Office 2010")
+				Office2010()
+			EndIF
+			If GUICtrlRead($Task9) == $GUI_Checked Then
+				c("Setting computer name")
+				Sleep(10000)
+				;_SetComputerName() ;Temporarily commented out to prevent changing of name
+			EndIF
+			If GUICtrlRead($Task10) == $GUI_Checked Then
+				c("Adding Office icons to taskbar")
+				Sleep(10000)
+			Endif
+		
 		Case $Go
 			c("Configuration started!")
 			 ; CONFIGURATION PROCESS START HERE @@@@@@@@@@@@@@@@
@@ -884,4 +898,3 @@ Func _Exit()
 Exit
 
 EndFunc
-
