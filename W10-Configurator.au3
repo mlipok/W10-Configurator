@@ -429,7 +429,7 @@ GUICtrlSetBkColor(-1, $color_black)
 GUICtrlSetColor(-1, 0x75EE3B)
  GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 
- $label[7] = GUICtrlCreateLabel("Search not started yet",16,170, 150 , 15, $SS_LEFTNOWORDWRAP)
+ $label[7]= GUICtrlCreateLabel("Search not started yet",16,170, 150 , 15, $SS_LEFTNOWORDWRAP)
  GUICtrlSetFont(-1,10,400,0,"Lucida Bright", 5)
  GUICtrlSetResizing($label[7], $GUI_DOCKAUTO)
  $wup = GUICtrlCreateProgress(16,142,649,20,-1,-1)
@@ -755,7 +755,8 @@ Func _PopulateNeeded($Host)
 		_UpdatesDownloadAndInstall()
 
 	Else
-
+		GUICtrlSetData($wup,"0")
+		GUICtrlSetData($label[7] ,"0%")
 		GUICtrlSetData($wul,"Your windows is up to date.")
 		c("Your Windows is up to date.")
 		Return 0
@@ -769,6 +770,8 @@ Func _UpdatesDownloadAndInstall()
 	$selected = _GUICtrlListView_GetSelectedIndices($wulv, True)
 	If $selected[0] = 0 Then
 		c("Results: Your Windows seems up to date.")
+		GUICtrlSetData($wup,"0")
+		GUICtrlSetData($label[7] ,"0%")
 		Return 0
 	EndIf
 	$objsearcher = _CreateMsUpdateSession($Host)
@@ -783,7 +786,7 @@ Func _UpdatesDownloadAndInstall()
 				Global $rawpercent = Number($calculate,1)
 				Global $percent = $rawpercent & "%"
 				GUICtrlSetData($wup,$rawpercent)
-				GUICtrlSetData($UpdatesPercent,$percent)
+				GUICtrlSetData($label[7] ,$percent)
 				_GUICtrlListView_SetItemText($wulv, $i, "Downloading...", 1)
 				_GUICtrlListView_SetItemFocused($wulv, $i)
 				_GUICtrlListView_EnsureVisible($wulv, $i)
@@ -798,7 +801,7 @@ Func _UpdatesDownloadAndInstall()
 	Next
 	$rebootneeded = False
 	GUICtrlSetData($wup,"0")
-	GUICtrlSetData($UpdatesPercent, "0")
+	GUICtrlSetData($label[7], "0")
 	c("All updates are downloaded, proceeding to install updates...")
 	For $x = 1 To $selected[0]
 		$item = _GUICtrlListView_GetItemText($wulv, $selected[$x])
@@ -811,7 +814,7 @@ Func _UpdatesDownloadAndInstall()
 				$rawpercent = Number($calculate,1)
 				$percent = $rawpercent & "%"
 				GUICtrlSetData($wup,$rawpercent)
-				GUICtrlSetData($UpdatesPercent,$percent)
+				GUICtrlSetData($label[7],$percent)
 				_GUICtrlListView_SetItemText($wulv, $i, "Installing...", 1)
 				_GUICtrlListView_SetItemFocused($wulv, $i)
 				_GUICtrlListView_EnsureVisible($wulv, $i)
@@ -829,13 +832,15 @@ Func _UpdatesDownloadAndInstall()
 	Next
 	If $rebootneeded Then
 ;~ 		MsgBox(64, "Reboot required", "A reboot is required to complete the installations, Rebooting in 10 seconds.", 10)
-		c("A reboot is required to finish installing updates, ")
+		c("A reboot is required to finish installing updates.")
+		GUICtrlSetData($wup, "0")
+		GUICtrlSetData($label[7], "0%")
 ;~ 		Shutdown(2 + 4 + 16)
 	Else
 		c("No reboot required, establishing a new Windows Updates Session...")
 		_GUICtrlListView_DeleteAllItems($wulv)
 		GUICtrlSetData($wup, "0")
-		GUICtrlSetData($UpdatesPercent, "0")
+		GUICtrlSetData($label[7], "0%")
 		_PopulateNeeded($Host)
 	EndIf
 	c("Your Windows seems up to date.")
