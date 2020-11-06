@@ -507,7 +507,6 @@ While 1
 			EndIF
 			If GUICtrlRead($Task4) == $GUI_Checked Then
 				c("Setting .PDF and .PDFXML to Adobe Reader")
-				Sleep(10000)
 			EndIF
 			If GUICtrlRead($task5) == $GUI_Checked Then
 				c("Installing OEM + Logo")
@@ -519,7 +518,6 @@ While 1
 			EndIF
 			If GUICtrlRead($Task7) == $GUI_Checked Then
 				c("Adding office 2010 to C:\")
-				sleep(10000)
 			EndIF
 			If GUICtrlRead($Task8) == $GUI_Checked Then
 				c("Installing MS Office 2010")
@@ -527,13 +525,12 @@ While 1
 			EndIF
 			If GUICtrlRead($Task9) == $GUI_Checked Then
 				c("Setting computer name")
-				Sleep(10000)
 				;_SetComputerName() ;Temporarily commented out to prevent changing of name
 			EndIF
 			If GUICtrlRead($Task10) == $GUI_Checked Then
 				c("Adding Office icons to taskbar")
-				Sleep(10000)
 			Endif
+			c("All tasks are completed!")
 		
 		Case $Go
 			c("Configuration started!")
