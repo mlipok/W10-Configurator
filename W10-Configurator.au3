@@ -78,7 +78,7 @@ Global $syspin = "syspin.exe"
 Global $ColNeeded
 Global $Host = @ComputerName
 Global $sBannedList
-Global $BannedList 
+Global $BannedList
 Global $label[10]
 Global $task[15]
 Global $sRZVersion ;Local RZGet Version
@@ -300,47 +300,47 @@ GUICtrlCreateGraphic(705, 45, 300, 455, BitOR($GUI_SS_DEFAULT_GRAPHIC,$SS_WHITEF
 GUICtrlSetColor(-1, 0x000000)
 GUICtrlSetBkColor(-1, 0xFFFFFF)
 GUICtrlSetGraphic(-1, $GUI_GR_COLOR, 0x000000, 0xFFFFFF)
-$task1 =  GuiCtrlCreateCheckbox("Windows Updates", 710, 48, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+$task[1] =  GuiCtrlCreateCheckbox("Windows Updates", 710, 48, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
 	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
  	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
-$task2 =  GuiCtrlCreateCheckbox("rzget", 710, 70, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+$task[2] =  GuiCtrlCreateCheckbox("rzget", 710, 70, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
 	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
  	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
-$task3 =  GuiCtrlCreateCheckbox("Default = Chrome", 710, 92, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+$task[3] =  GuiCtrlCreateCheckbox("Default = Chrome", 710, 92, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
 	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
  	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
-$task4 =  GuiCtrlCreateCheckbox(".pdf/pdfxml = Reader", 710, 114, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+$task[4] =  GuiCtrlCreateCheckbox(".pdf/pdfxml = Reader", 710, 114, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
 	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
  	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
-$task5 =  GuiCtrlCreateCheckbox("Install OEM + Logo", 710, 136, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+$task[5] =  GuiCtrlCreateCheckbox("Install OEM + Logo", 710, 136, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
 	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
  	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
-$task6 =  GuiCtrlCreateCheckbox("Disable hibernation", 710, 158, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+$task[6] =  GuiCtrlCreateCheckbox("Disable hibernation", 710, 158, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
 	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
  	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
-$task7 =  GuiCtrlCreateCheckbox("Add Office 2010 to C:\", 710, 180, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+$task[7] =  GuiCtrlCreateCheckbox("Add Office 2010 to C:\", 710, 180, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
 	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
  	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
-$task8 =  GuiCtrlCreateCheckbox("Install Office 2010", 710, 202, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+$task[8] =  GuiCtrlCreateCheckbox("Install Office 2010", 710, 202, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
 	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
  	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
-$task9 =  GuiCtrlCreateCheckbox("ComputerName", 710, 224, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+$task[9] =  GuiCtrlCreateCheckbox("ComputerName", 710, 224, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
 	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
  	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
-$task10 = GuiCtrlCreateCheckbox("Add Office icons to taskbar", 710, 246, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+$task[10] = GuiCtrlCreateCheckbox("Add Office icons to taskbar", 710, 246, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
 	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
  	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
-$task11 = GuiCtrlCreateCheckbox("Select All", 710, 268, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
+$task[11] = GuiCtrlCreateCheckbox("Select All", 710, 268, 260, 20, BitOR($TVS_DISABLEDRAGDROP,$TVS_CHECKBOXES))
 	GUICtrlSetFont(-1,13,400,0,"Lucida Bright", 5)
  	GUICtrlSetResizing(-1,$GUI_DOCKAUTO)
 	 GUICtrlSetBkColor(-1, $COLOR_WHITE)
@@ -447,13 +447,7 @@ GUICtrlSetColor(-1, 0x75EE3B)
 
  GUISwitch($GUI,_GUICtrlTab_SetCurFocus($tab,1)&GUICtrlRead ($tab, 1))
 
-
-
 _GUICtrlTab_SetCurFocus($tab,0)
-;~ 	Global $console = GUICtrlCreateEdit("", 9, 364, 719, 258, BitOR ($ES_AUTOVSCROLL,$ES_READONLY,$ES_MULTILINE,$ES_UPPERCASE,$WS_VSCROLL,$WS_HSCROLL),-1)
-;~ 	GUICtrlSetFont(-1,10,400,0,"Consolas")
-;~ 	GUICtrlSetBkColor($console, 0x000000)
-;~ 	GUICtrlSetColor($console, 0x00FF00)
 
 	ConsoleWriteGUI($console, "=============== Win10 CONFIGURATOR CONSOLE===============    " &  _NowTime(3) )
 
@@ -467,71 +461,69 @@ While 1
 		Case $GUI_EVENT_CLOSE
 			Exit
 
-		Case $task11
-			If GUICtrlRead($task11) == $GUI_CHECKED Then
-				GUICtrlSetState($task1, $GUI_Checked)
-				GUICtrlSetState($task2, $GUI_Checked)
-				GUICtrlSetState($task3, $GUI_Checked)
-				GUICtrlSetState($task4, $GUI_Checked)
-				GUICtrlSetState($task5, $GUI_Checked)
-				GUICtrlSetState($task6, $GUI_Checked)
-				GUICtrlSetState($task7, $GUI_Checked)
-				GUICtrlSetState($task8, $GUI_Checked)
-				GUICtrlSetState($task9, $GUI_Checked)
-				GUICtrlSetState($task10, $GUI_Checked)
-			ElseIf GUICtrlRead($task11) == $GUI_UNCHECKED Then
-				GUICtrlSetState($task1, $GUI_UnChecked)
-				GUICtrlSetState($task2, $GUI_UnChecked)
-				GUICtrlSetState($task3, $GUI_UnChecked)
-				GUICtrlSetState($task4, $GUI_UnChecked)
-				GUICtrlSetState($task5, $GUI_UnChecked)
-				GUICtrlSetState($task6, $GUI_UnChecked)
-				GUICtrlSetState($task7, $GUI_UnChecked)
-				GUICtrlSetState($task8, $GUI_UnChecked)
-				GUICtrlSetState($task9, $GUI_UnChecked)
-				GUICtrlSetState($task10, $GUI_UnChecked)
+		Case $task[11]
+			If GUICtrlRead($task[11]) == $GUI_CHECKED Then
+				For $i = 10 To 1 Step -1
+					GUICtrlSetState($task[$i], $GUI_CHECKED)
+				Next
+				c("All tasks are checked.")
+			ElseIf GUICtrlRead($task[11]) == $GUI_UNCHECKED Then
+				For $i = 10 To 1 Step -1
+					GUICtrlSetState($task[$i], $GUI_UNCHECKED)
+				Next
+				c("All tasks are unckecked.")
 			EndIf
 		Case $sRunTasks
-			c("Running Tasks")
-			If GUICtrlRead($Task1) == $GUI_Checked Then
+			c("Configuration started !")
+
+			If GUICtrlRead($task[2]) == $GUI_Checked Then
+				c("Installing")
+				Rzget()
+			EndIf
+
+			If GUICtrlRead($task[3]) == $GUI_Checked Then
+				c("Setting Chrome as default browser")
+				defaultBrowser()
+			EndIf
+
+			If GUICtrlRead($task[4]) == $GUI_Checked Then
+				c("Setting .PDF and .PDFXML to Adobe Reader")
+			EndIf
+
+			If GUICtrlRead($task[5]) == $GUI_Checked Then
+				c("Installing OEM + Logo")
+				selfoem()
+			EndIf
+
+			If GUICtrlRead($task[6]) == $GUI_Checked Then
+				c("Disabling Hibernation")
+				;ScreenSaver(True) ;True to disable / false to reset
+			EndIf
+
+			If GUICtrlRead($task[7]) == $GUI_Checked Then
+				c("Adding office 2010 to C:\")
+			EndIf
+
+			If GUICtrlRead($task[8]) == $GUI_Checked Then
+				c("Installing MS Office 2010")
+				Office2010()
+			EndIf
+
+			If GUICtrlRead($task[9]) == $GUI_Checked Then
+				c("Setting computer name")
+				;_SetComputerName() ;Temporarily commented out to prevent changing of name
+			EndIf
+
+			If GUICtrlRead($task[1]) == $GUI_Checked Then
 				c("Running Windows Updates Task")
 				_PopulateNeeded($Host)
 			Endif
-			If GUICtrlRead($Task2) == $GUI_Checked Then
-				c("Running RZGet")
-				Rzget()
-			EndIF
-			If GUICtrlRead($Task3) == $GUI_Checked Then
-				c("Setting Chrome as default browser")
-				defaultBrowser()
-			EndIF
-			If GUICtrlRead($Task4) == $GUI_Checked Then
-				c("Setting .PDF and .PDFXML to Adobe Reader")
-			EndIF
-			If GUICtrlRead($task5) == $GUI_Checked Then
-				c("Installing OEM + Logo")
-				selfoem()
-			EndIF
-			If GUICtrlRead($Task6) == $GUI_Checked Then
-				c("Disabling Hibernation")
-				;ScreenSaver()
-			EndIF
-			If GUICtrlRead($Task7) == $GUI_Checked Then
-				c("Adding office 2010 to C:\")
-			EndIF
-			If GUICtrlRead($Task8) == $GUI_Checked Then
-				c("Installing MS Office 2010")
-				Office2010()
-			EndIF
-			If GUICtrlRead($Task9) == $GUI_Checked Then
-				c("Setting computer name")
-				;_SetComputerName() ;Temporarily commented out to prevent changing of name
-			EndIF
-			If GUICtrlRead($Task10) == $GUI_Checked Then
+
+			If GUICtrlRead($task[10]) == $GUI_Checked Then
 				c("Adding Office icons to taskbar")
 			Endif
 			c("All tasks are completed!")
-		
+
 		Case $Go
 			c("Configuration started!")
 			 ; CONFIGURATION PROCESS START HERE @@@@@@@@@@@@@@@@
@@ -582,20 +574,104 @@ Func _SetComputerName($sCmpName)
 EndFunc   ;==>_SetComputerName
 #EndRegion SetComputerName <<<<<<<<
 
+#Region DefaultBrowser >>>>>>>>>>>>
 Func defaultBrowser()
-	 ;HKEY_CURRENT_USER\SOFTWARE\RegisteredApplications
-	 ;HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice (ProgId REG_SZ ChromeHTML)
-	 ;
+$chrome = "@echo off" & @CRLF _
+	& 'call :isAdmin' & @CRLF _
+	& 'if %errorlevel% == 0 (' & @CRLF _
+	& 'goto :run' & @CRLF _
+	& ') else (' & @CRLF _
+	& 'echo Requesting administrative privileges...' & @CRLF _
+	& 'goto :UACPrompt' & @CRLF _
+	& ')' & @CRLF _
+	& 'exit /b' & @CRLF _
+	& ':isAdmin' & @CRLF _
+	& 'fsutil dirty query %systemdrive% >nul' & @CRLF _
+	& 'exit /b' & @CRLF _
+	& ':run' & @CRLF _
+	& 'cmd /c ' & $ConfigDir & '\SetDefaultBrowser.exe chrome' & @CRLF _
+	& 'echo done.' & @CRLF _
+	& 'exit /b' & @CRLF _
+	& ':UACPrompt' & @CRLF _
+	& 'echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"' & @CRLF _
+	& 'echo UAC.ShellExecute "cmd.exe", "/c %~s0 %~1", "", "runas", 1 >> "%temp%\getadmin.vbs"' & @CRLF _
+	& '"%temp%\getadmin.vbs"' & @CRLF _
+	& 'del "%temp%\getadmin.vbs"' & @CRLF _
+	& 'exit /B'
+
+	FileWrite($ConfigDir & "\defChrome.bat", $chrome)
+    c("Wait...")
+    ShellExecute($ConfigDir &  "\defChrome.bat")
+    c("Done !")
  EndFunc
+#EndRegion DefaultBrowser <<<<<<<
+
+#Region DefaultPDF
+Func defaultPDF()
+	c("Beginning to change default Application association to .pdf extension...")
+$vbs_def_pdf = @CRLF  _
+& "@echo off" & @CRLF _
+& "cd " & $ConfigDir & "\Ressources\" & @CRLF _
+& "SetUserFTA.exe .pdf AcroExch.Document.DC Everyone" & @CRLF  _
+& "SetUserFTA.exe .pdfxml AcroExch.Document.DC Everyone" & @CRLF  _
+& "exit /b"
+
+FileWrite(@TempDir & "\defaultPDF.bat", $vbs_def_pdf)
+ShellExecute("defaultPDF.bat", "", @TempDir, "open", @SW_SHOW) ; change to @SW_HIDE before release!
+c("Done, .pdf and .pdfxml extensions are now associated to: Adobe Reader DC !")
+EndFunc
+#EndRegion DefaultPDF
+
+#Region PIN TO TASKBAR >>>>>>>>>>>
+
+;=======H   E   L    P   SYSPIN   H   E   L  P===========
+	;	syspin ["file"] #### or syspin ["file"] "commandstring"
+	;	5386 = Pin to taskbar
+	;	5387 = Unpin from taskbar
+	;	51201 = Pin to start
+	;	51394 = Unpin  from start
+	;Examples :
+	;	syspin "%PROGRAMFILES%\Internet Explorer\iexplore.exe" 5386
+	;	syspin "C:\Windows\notepad.exe" "Pin to taskbar"
+	;	syspin "%WINDIR%\System32\calc.exe" "Pin to start"
+	;	syspin "%WINDIR%\System32\calc.exe" "Unpin from taskbar"
+	;	syspin "C:\Windows\System32\calc.exe" 51201
+	;
+	;Note : You cannot pin any metro app or batch file.
+	;
+;======== H   E   L    P   SYSPIN   H   E   L  P===========
+
+Func syspin()
+	; MAGIC NUMBERS "5386" SEEMS TO WORK BETTER THAN "PIN TO TASKBAR"
+
+	$Excel = '"%PROGRAMFILES(X86)%\Microsoft Office\Office14\EXCEL.EXE" 5386'
+	$Word = '"%PROGRAMFILES(X86)%\Microsoft Office\Office14\WORD.EXE" 5386'
+	$Outlook = '"%PROGRAMFILES(X86)%\Microsoft Office\Office14\OUTLOOK.EXE" 5386'
+	$Edge = '"%PROGRAMFILES(X86)%\Microsoft\Edge\Application\msedge.exe" 5387'
+	$Chrome = '"%PROGRAMFILES(X86)%\Google\Chrome\Application\chrome.exe" 5386'
+
+	c("Pinning Excel to taskbar...")
+ShellExecuteWait($syspin, $Excel, $ConfigDir,"open", @SW_HIDE )
+	c("Pinning Outlook to taskbar...")
+ShellExecuteWait($syspin, $Outlook, $ConfigDir,"open", @SW_HIDE )
+	c("Pinning Word to taskbar...")
+ShellExecuteWait($syspin, $Word, $ConfigDir,"open", @SW_HIDE )
+	c("Pinning Chrome to taskbar...")
+ShellExecuteWait($syspin, $Chrome, $ConfigDir,"open", @SW_HIDE )
+	c("Unpinning crappy Edge from taskbar...")
+ShellExecuteWait($syspin, $Edge, $ConfigDir,"open", @SW_HIDE )
+	c("==========>> Pin to taskbar completed ! <<=============")
+EndFunc
+#EndRegion PIN TO TASKBAR <<<<<<<<<<<
+
 
  #Region 		 INSTALL OFFICE 2010
-
- Func Office2010() ;==> TO DO
+ Func Office2010() ;==> TO DO (Professional Plus version OR 365)
+MsgBox(16, @ScriptName, "If you see this message, it means this function is still under construction.")
 
 $officePath = "CHANGEME"
 
  EndFunc
-
  #EndRegion INSTALL OFFICE 2010
 
 Func _IsChecked($control)
@@ -707,10 +783,10 @@ Func _UpdatesDownloadAndInstall()
 				Global $rawpercent = Number($calculate,1)
 				Global $percent = $rawpercent & "%"
 				GUICtrlSetData($wup,$rawpercent)
-;~ 				GUICtrlSetData($UpdatesPercent,$percent)
+				GUICtrlSetData($UpdatesPercent,$percent)
 				_GUICtrlListView_SetItemText($wulv, $i, "Downloading...", 1)
 				_GUICtrlListView_SetItemFocused($wulv, $i)
-;~ 				_GUICtrlListView_EnsureVisible($wulv, $i)
+				_GUICtrlListView_EnsureVisible($wulv, $i)
 				$updatestodownload = ObjCreate("Microsoft.Update.UpdateColl")
 				$updatestodownload.add($update)
 				$downloadsession = $objsearcher.createupdatedownloader()
@@ -722,6 +798,7 @@ Func _UpdatesDownloadAndInstall()
 	Next
 	$rebootneeded = False
 	GUICtrlSetData($wup,"0")
+	GUICtrlSetData($UpdatesPercent, "0")
 	c("All updates are downloaded, proceeding to install updates...")
 	For $x = 1 To $selected[0]
 		$item = _GUICtrlListView_GetItemText($wulv, $selected[$x])
@@ -734,10 +811,10 @@ Func _UpdatesDownloadAndInstall()
 				$rawpercent = Number($calculate,1)
 				$percent = $rawpercent & "%"
 				GUICtrlSetData($wup,$rawpercent)
-;~ 				GUICtrlSetData($UpdatesPercent,$percent)
+				GUICtrlSetData($UpdatesPercent,$percent)
 				_GUICtrlListView_SetItemText($wulv, $i, "Installing...", 1)
 				_GUICtrlListView_SetItemFocused($wulv, $i)
-;~ 				_GUICtrlListView_EnsureVisible($wulv, $i)
+				_GUICtrlListView_EnsureVisible($wulv, $i)
 				$installsession = $objsearcher.createupdateinstaller()
 				$updatestoinstall = ObjCreate("Microsoft.Update.UpdateColl")
 				$updatestoinstall.add($update)
@@ -755,10 +832,13 @@ Func _UpdatesDownloadAndInstall()
 		c("A reboot is required to finish installing updates, ")
 ;~ 		Shutdown(2 + 4 + 16)
 	Else
+		c("No reboot required, establishing a new Windows Updates Session...")
 		_GUICtrlListView_DeleteAllItems($wulv)
+		GUICtrlSetData($wup, "0")
+		GUICtrlSetData($UpdatesPercent, "0")
 		_PopulateNeeded($Host)
 	EndIf
-	GUICtrlSetData($wup, "0")
+	c("Your Windows seems up to date.")
 	$downloadsession = 0
 	$updatestodownload = 0
 	Return 0
@@ -768,7 +848,7 @@ EndFunc   ;_UpdatesDownloadAndInstall
 	#EndRegion WINDOWS UPDATE
 
 
-
+#Region GATHER SYSTEM INFORMATION >>>>>>>>>>>>>>>
 	Func _GetSystemInfo()
 	Local $sReturn = "OK"
 
@@ -820,7 +900,9 @@ GUICtrlSetData($iEdit, $sInfos )
 
 	Return $sReturn
 EndFunc
+#EndRegion GATHER SYSTEM INFORMATION <<<<<<<<<<<<
 
+#Region GET HDD SMART >>>>>>>>>
 Func _GetSmart()
 
 	Dim $Obj_WMIService = ObjGet("winmgmts:\\" & "localhost" & "\root\wmi")
@@ -887,7 +969,7 @@ Func _GetSmart()
 	Return $bReturn
 
 EndFunc
-
+#EndRegion GET HDD SMART <<<<<<<<<<
 
 
 Func _Exit()
