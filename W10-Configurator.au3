@@ -83,6 +83,7 @@ Global $label[10]
 Global $task[15]
 Global $sRZVersion ;Local RZGet Version
 Global $sORZVersion ;Online RZGet Version
+Global $sRZCatalog ;RZ Catalog
 #EndRegion DECLARE VARIABLES FOR LATER USE
 
 
@@ -217,6 +218,22 @@ Func _CheckRZGetVersion()
 		InetGet("https://github.com/rzander/ruckzuck/releases/download/" & $sORZVersion & "/Rzget.exe", @ScriptDir & "\Ressources\Rzget.exe",2,0)
 	Else
 		c("RZGet is up to date.")
+	EndIf
+EndFunc
+
+Func _RZCatalog()
+	$sRZCatalog = 0
+	c("Cleared RZ catalog data")
+	c("Retrieving updated catalog")
+	local $Powershell = RUN("powershell -Command ((" & @ScriptDir & "\Ressources\Rzget.exe search | convertfrom-json) | Select ShortName | Out-String -Stream | foreach {$_.trimend()} | Where {$_ -ne ''} | Where {$_ -ne '---------'} | Where {$_ -ne 'ShortName'})", @SystemDir, @SW_HIDE, $STDOUT_CHILD + $STDERR_CHILD)
+	ProcessWaitClose($Powershell)
+	$sRZCatalog = StringSplit(StdoutRead($Powershell),@CR,2)
+	Local $ColCount = UBound($sRZCatalog,1)-1
+	_ArrayDelete($sRZCatalog, $ColCount) ;Removes the blank line at the end
+	If ISArray($sRZCatalog) = True Then 
+		c("Catalog updated.")
+	Else
+		C("Error in updating catalog")
 	EndIf
 EndFunc
 #EndRegion RZGET <<< (working flawless)
