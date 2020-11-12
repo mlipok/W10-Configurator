@@ -84,6 +84,7 @@ Global $task[15]
 Global $sRZVersion ;Local RZGet Version
 Global $sORZVersion ;Online RZGet Version
 Global $sRZCatalog ;RZ Catalog
+Global $sRZGet = "& '" & @scriptDir & "\Ressources\RZget.exe'"
 #EndRegion DECLARE VARIABLES FOR LATER USE
 
 
@@ -207,7 +208,6 @@ Func _GetOnlineRZVersion()
 		if @error Then ExitLoop
 	WEnd
 	$sORZVersion = StringReplace(StringTrimRight(StringTrimLeft($sORZVersion,63),6),"/RZGet.exe}","")
-	c("Online Version of RZGet is: " & $sORZVersion)
 EndFunc
 
 Func _CheckRZGetVersion()
@@ -225,7 +225,7 @@ Func _RZCatalog()
 	$sRZCatalog = 0
 	c("Cleared RZ catalog data")
 	c("Retrieving updated catalog")
-	local $Powershell = RUN("powershell -Command ((" & @ScriptDir & "\Ressources\Rzget.exe search | convertfrom-json) | Select ShortName | Out-String -Stream | foreach {$_.trimend()} | Where {$_ -ne ''} | Where {$_ -ne '---------'} | Where {$_ -ne 'ShortName'})", @SystemDir, @SW_HIDE, $STDOUT_CHILD + $STDERR_CHILD)
+	local $Powershell = RUN("powershell -Command ((" & $sRZGet & " search | convertfrom-json) | Select ShortName | Out-String -Stream | foreach {$_.trimend()} | Where {$_ -ne ''} | Where {$_ -ne '---------'} | Where {$_ -ne 'ShortName'})", @SystemDir, @SW_HIDE, $STDOUT_CHILD + $STDERR_CHILD)
 	ProcessWaitClose($Powershell)
 	$sRZCatalog = StringSplit(StdoutRead($Powershell),@CR,2)
 	Local $ColCount = UBound($sRZCatalog,1)-1
