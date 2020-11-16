@@ -85,7 +85,7 @@ Global $sRZVersion ;Local RZGet Version
 Global $sORZVersion ;Online RZGet Version
 Global $sRZCatalog ;RZ Catalog
 Global $RZColCount
-Global $sRZGet = "& '" & @scriptDir & "\Ressources\RZget.exe'"
+Global $sRZGet = "'" & @scriptDir & "\Ressources\RZget.exe'"
 Global $sRZCatUpd = "Retrieve Catalog"
 #EndRegion DECLARE VARIABLES FOR LATER USE
 
@@ -227,7 +227,7 @@ Func _RZCatalog()
 	$sRZCatalog = 0
 	c("Cleared RZ catalog data")
 	c("Retrieving updated catalog")
-	local $Powershell = RUN("powershell -Command ((" & $sRZGet & " search | convertfrom-json) | Select ShortName | Out-String -Stream | foreach {$_.trimend()} | Where {$_ -ne ''} | Where {$_ -ne '---------'})", @SystemDir, @SW_HIDE, $STDOUT_CHILD + $STDERR_CHILD)
+	local $Powershell = RUN("powershell -Command ((& " & $sRZGet & " search | convertfrom-json) | Select ShortName | Out-String -Stream | foreach {$_.trimend()} | Where {$_ -ne ''} | Where {$_ -ne '---------'})", @SystemDir, @SW_HIDE, $STDOUT_CHILD + $STDERR_CHILD)
 	ProcessWaitClose($Powershell)
 	$sRZCatalog = StringSplit(StdoutRead($Powershell),@CR,2)
 <<<<<<< HEAD:W10-Configurator.au3
