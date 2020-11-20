@@ -90,17 +90,307 @@ Global $hInput2
 Global $sRZVersion ;Local RZGet Version
 Global $sORZVersion ;Online RZGet Version
 Global $sRZCatalog ;RZ Catalog
-Global $sRZGet = "&'" & @ScriptDir & "\Ressources\RZget.exe'"
+Global $sRZGet = FileGetShortName("'" & @ScriptDir & "\Ressources\RZget.exe'")
 #EndRegion DECLARE VARIABLES  FOR LATER USE
 
 
 GUI()
 
+#Region  GUI SCRIPT <<<<<<<< @@@@@@@@@@@@@@@@@@@@
+
+Func GUI()
+
+	Global $GUI = GUICreate(@ScriptName & " - Version: " & FileGetVersion(@ScriptFullPath), 1043, 820, -1, -1, -1, -1) ;740,632)
+	GUISetIcon("Icon\gear.ico", $GUI)
+	$tab = GUICtrlCreateTab(0, 0, 697, 541, -1, -1)
+	GUICtrlSetState($tab, $GUI_ONTOP) ;2048
+	GUICtrlCreateTabItem("System Info")
+	GUICtrlCreateTabItem("Configuration")
+	GUICtrlCreateTabItem("Windows Updater")
+	GUICtrlCreateTabItem("")
+	_GUICtrlTab_SetCurFocus($tab, -1)
+	GUICtrlSetResizing(-1, 70)
+
+	#Region GUI setup for Tasks
+	GUICtrlCreateGraphic(705, 45, 300, 455, BitOR($GUI_SS_DEFAULT_GRAPHIC, $SS_WHITEFRAME, $WS_BORDER))
+	GUICtrlSetColor(-1, 0x000000)
+	GUICtrlSetBkColor(-1, 0xFFFFFF)
+	GUICtrlSetGraphic(-1, $GUI_GR_COLOR, 0x000000, 0xFFFFFF)
+	$task[1] = GUICtrlCreateCheckbox("Windows Updater", 710, 48, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+	$task[2] = GUICtrlCreateCheckbox("Install Softwares", 710, 70, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+
+	$hInput2 = GUICtrlCreateInput("", 710, 440, 280, 30)
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+	GUICtrlSetState(-1, $GUI_DISABLE)
+
+	$task[3] = GUICtrlCreateCheckbox("Default = Chrome", 710, 92, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+
+	$task[4] = GUICtrlCreateCheckbox(".pdf/pdfxml = Reader", 710, 114, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+
+	$task[5] = GUICtrlCreateCheckbox("Install OEM + Logo", 710, 136, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+
+	$task[6] = GUICtrlCreateCheckbox("Disable hibernation", 710, 158, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+
+	$task[7] = GUICtrlCreateCheckbox("Copy Office 2010 to C:\", 710, 180, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+
+	$task[8] = GUICtrlCreateCheckbox("Install Office 2010", 710, 202, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+
+	$task[9] = GUICtrlCreateCheckbox("ComputerName", 710, 224, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+
+	$task[10] = GUICtrlCreateCheckbox("Add Office icons to taskbar", 710, 246, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+
+	$task[11] = GUICtrlCreateCheckbox("Select All", 710, 268, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+
+	$sRunTasks = GUICtrlCreateButton("Run", 910, 510, 80, 30)
+
+	$console = _GUICtrlRichEdit_Create($GUI, "", 0, 559, 1043, 258, BitOR($ES_MULTILINE, $WS_VSCROLL, $ES_AUTOVSCROLL)) ;9, 364, 719, 258
+	_GUICtrlRichEdit_SetEventMask($console, $ENM_LINK)
+	_GUICtrlRichEdit_AutoDetectURL($console, True)
+	_GUICtrlRichEdit_SetCharColor($console, 0xFFFFFF)
+	_GUICtrlRichEdit_SetBkColor($console, 0x000000)
+	_GUICtrlRichEdit_SetReadOnly($console, True)
+	_GUICtrlRichEdit_HideSelection($console, True)
+	_GUICtrlRichEdit_SetFont($console, 12, "Consolas")
+
+	$label[0] = GUICtrlCreateLabel("Select tasks to do:", 780, 23, 150, 18, $SS_CENTER, -1)
+	GUICtrlSetFont(-1, 12, 800, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+
+	ConsoleWriteGUI($console, "=============== Win10 CONFIGURATOR CONSOLE ===============")
+
+	;Config Tab
+	GUISwitch($GUI, _GUICtrlTab_SetCurFocus($tab, 1) & GUICtrlRead($tab, 1))
+
+GUICtrlCreateGroup("OEM",6,35,380,200)
+	$label[1] = GUICtrlCreateLabel("Manufacturer:", 31, 52, 95)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing($label[1], $GUI_DOCKAUTO)
+	$Manufacturer = GUICtrlCreateInput("", 125, 50, 222, 20, -1, $WS_EX_CLIENTEDGE)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+
+	$label[2] = GUICtrlCreateLabel("Model:", 77, 90)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing($label[2], $GUI_DOCKAUTO)
+	$model = GUICtrlCreateInput("", 125, 88, 222, 20, -1, $WS_EX_CLIENTEDGE)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+
+	$label[3] = GUICtrlCreateLabel("Support Hours:", 24, 128, 95)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	$supportHours = GUICtrlCreateInput("", 125, 126, 222, 20, -1, $WS_EX_CLIENTEDGE)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+
+	$label[4] = GUICtrlCreateLabel("Support Website:", 10, 166, 110)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	$supportUrl = GUICtrlCreateInput("https://", 125, 164, 222, 20, -1, $WS_EX_CLIENTEDGE)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+
+	$OEMLogo = GUICtrlCreateInput("", 125, 202, 222, 20, -1, $WS_EX_CLIENTEDGE)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	$label[5] = GUICtrlCreateLabel("Logo:", 83, 204, 101)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	$oemfile = GUICtrlCreateButton("...", 350, 202, 30, 20, -1, -1)
+	GUICtrlSetFont(-1, 10, 400, 0, "MS sans serif", 2)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+
+GUICtrlCreateGroup("Misc",6,235,380,200)
+	$label[6] = GUICtrlCreateLabel("Computer Name:", 12, 252, 110, 15, -1, -1)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	$compname = GUICtrlCreateInput($Host, 125, 250, 222, 20, -1, $WS_EX_CLIENTEDGE)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+
+	;System Info tab
+	GUISwitch($GUI, _GUICtrlTab_SetCurFocus($tab, 0) & GUICtrlRead($tab, 1))
+
+	Global $iEdit = GUICtrlCreateEdit("", 5, 25, 677, 481, BitOR($ES_AUTOVSCROLL, $ES_READONLY, $ES_MULTILINE, $ES_UPPERCASE, $WS_VSCROLL, $WS_HSCROLL), -1)
+
+	_GetSystemInfo()
+
+	;Windows Updater tab
+	GUISwitch($GUI, _GUICtrlTab_SetCurFocus($tab, 2) & GUICtrlRead($tab, 1))
+
+	$wulv = GUICtrlCreateListView("Descriptions|Status", 17, 192, 647, 334, -1, $WS_EX_CLIENTEDGE)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	_GUICtrlListView_SetColumnWidth($wulv, 0, 500)
+	GUICtrlSetBkColor(-1, $color_silver)
+	GUICtrlSetColor(-1, 0x75EE3B)
+	_GUICtrlListView_SetColumnWidth($wulv, 1, 140)
+	GUICtrlSetBkColor(-1, $color_black)
+	GUICtrlSetColor(-1, 0x75EE3B)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+
+	$label[7] = GUICtrlCreateLabel("Search not started yet", 16, 170, 150, 15, $SS_LEFTNOWORDWRAP)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing($label[7], $GUI_DOCKAUTO)
+	$wup = GUICtrlCreateProgress(16, 142, 649, 20, -1, -1)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+
+	$label[8] = GUICtrlCreateInput("", 16, 90, 300, 40) ;User defined additions to banned list
+	GUICtrlCreateLabel("Use the below box to exclude updates from being applied: (ex. Silverlight)", 16, 55, 310, 40)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+
+	$wus = GUICtrlCreateButton("Search", 500, 80, 100, 30, -1, -1)
+	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+
+	GUISwitch($GUI, _GUICtrlTab_SetCurFocus($tab, 1) & GUICtrlRead($tab, 1))
+
+	_GUICtrlTab_SetCurFocus($tab, 0)
+
+	GUISetState(@SW_SHOW, $GUI)
+;~  return $GUI
+	#EndRegion GUI setup for Tasks
+
+	While 1
+
+		Switch GUIGetMsg()
+
+			Case $GUI_EVENT_CLOSE
+				Exit
+
+			Case $task[11]
+				If GUICtrlRead($task[11]) == $GUI_CHECKED Then
+					For $i = 10 To 1 Step -1
+						GUICtrlSetState($task[$i], $GUI_CHECKED)
+					Next
+					c("All tasks are checked.")
+				ElseIf GUICtrlRead($task[11]) == $GUI_UNCHECKED Then
+					For $i = 10 To 1 Step -1
+						GUICtrlSetState($task[$i], $GUI_UNCHECKED)
+					Next
+					c("All tasks are unckecked.")
+				EndIf
+
+			Case $task[2]
+				If GUICtrlRead($task[2]) == $GUI_Checked Then
+					;If GUICtrlGetState($hInput2) = "144" Then GUICtrlSetState($hInput2, $GUI_ENABLE)
+					;If FileExists($ConfigDir & "\rzget.bat") Then FileDelete($configDir & "\rzget.bat")
+					_RZCatalog()
+
+				Else
+					;If GUICtrlGetState($hInput2) = "80" Then GUICtrlSetState($hInput2, $GUI_DISABLE)
+					GUICtrlSetData($hInput2, "") ; input emptied
+				EndIf
+
+
+			Case $sRunTasks
+
+
+				c("Configuration started !")
+
+				If GUICtrlRead($task[2]) == $GUI_Checked Then
+
+					Rzget()
+					GUICtrlSetState($task[2], $GUI_UNCHECKED)
+					GUICtrlSetData($hInput2, "") ; emptied
+				EndIf
+
+				If GUICtrlRead($task[3]) == $GUI_Checked Then
+					c("Setting Chrome as default browser..")
+					defaultBrowser()
+				EndIf
+
+				If GUICtrlRead($task[4]) == $GUI_Checked Then
+					c("Setting .PDF and .PDFXML to Adobe Reader...")
+				EndIf
+
+				If GUICtrlRead($task[5]) == $GUI_Checked Then
+					c("Installing OEM + Logo...")
+					selfoem()
+				EndIf
+
+				If GUICtrlRead($task[6]) == $GUI_Checked Then
+					c("Disabling Hibernation...")
+					;ScreenSaver(True) ;True to disable / false to reset
+				EndIf
+
+				If GUICtrlRead($task[7]) == $GUI_Checked Then
+					c("Adding office 2010 to C:\...")
+				EndIf
+
+				If GUICtrlRead($task[8]) == $GUI_Checked Then
+					c("Installing MS Office 2010...")
+					Office2010()
+				EndIf
+
+				If GUICtrlRead($task[9]) == $GUI_Checked Then
+					c("Changing computer name...")
+					;_SetComputerName() ;Temporarily commented out to prevent changing of name
+				EndIf
+
+				If GUICtrlRead($task[1]) == $GUI_Checked Then
+					c("Running Windows Updater...")
+					_PopulateNeeded($Host)
+				EndIf
+
+				If GUICtrlRead($task[10]) == $GUI_Checked Then
+					c("Adding Office icons to taskbar...")
+				EndIf
+				c("All tasks are completed!")
+
+			Case $wus
+				_PopulateNeeded($Host)
+
+			Case $oemfile
+				$cLogo = FileOpenDialog(@ScriptName, @DesktopDir, "BMP files (*.bmp)", $FD_FILEMUSTEXIST)
+				GUICtrlSetData($OEMLogo, $cLogo)
+		EndSwitch
+	WEnd
+
+EndFunc   ;==>GUI
+#EndRegion  GUI SCRIPT <<<<<<<< @@@@@@@@@@@@@@@@@@@@
+
 Func _Main()
 
 
 	$hGUI = GUICreate("Software Selector", 300, 100)
-	GUICtrlCreateLabel("Start to type letters and i'll suggest softwares:", 10, 10, 280, 20)
+	GUICtrlCreateLabel("Start to type letters and I'll suggest softwares:", 10, 10, 280, 20)
 	$hInput = GUICtrlCreateInput("", 10, 40, 280, 20)
 	$hButton = GUICtrlCreateButton("Choose", 250, 70)
 	GUISetState(@SW_SHOW, $hGUI)
@@ -177,7 +467,6 @@ Func _Main()
 	WEnd
 	GUIDelete($hGUI)
 EndFunc   ;==>_Main
-
 Func _CheckInputText($sCurrInput, ByRef $aSelected)
 	Local $sPartialData = ""
 	If (IsArray($aSelected)) And ($aSelected[0] <= $aSelected[1]) Then
@@ -317,34 +606,37 @@ Func Rzget()
 
 	If FileExists($ConfigDir & "\rzget.exe") Then ; IF RZGET IS IN CONFIG FOLDER @@@@
 		_CheckRZGetVersion()
-		$rzcmd = '@echo off' & @CRLF _
-				 & 'call :isAdmin' & @CRLF _
-				 & 'if %errorlevel% == 0 (' & @CRLF _
-				 & 'goto :run' & @CRLF _
-				 & ') else (' & @CRLF _
-				 & 'echo Requesting administrative privileges...' & @CRLF _
-				 & 'goto :UACPrompt' & @CRLF _
-				 & ')' & @CRLF _
-				 & 'exit /b' & @CRLF _
-				 & ':isAdmin' & @CRLF _
-				 & 'fsutil dirty query %systemdrive% >nul' & @CRLF _
-				 & 'exit /b' & @CRLF _
-				 & ':run' & @CRLF _
-				 & 'cmd /c ' & FileGetShortName(@ScriptDir & "\Ressources\rzget.exe") & " install " & GUICtrlRead($hInput2) & @CRLF _
-				 & 'echo done.' & @CRLF _
-				 & 'exit /b' & @CRLF _
-				 & ':UACPrompt' & @CRLF _
-				 & 'echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"' & @CRLF _
-				 & 'echo UAC.ShellExecute "cmd.exe", "/c %~s0 %~1", "", "runas", 1 >> "%temp%\getadmin.vbs"' & @CRLF _
-				 & '"%temp%\getadmin.vbs"' & @CRLF _
-				 & 'del "%temp%\getadmin.vbs"' & @CRLF _
-				 & 'exit /B'
-;============================================================================
-				 c("Creating Rzget process...")
-				FileWrite($ConfigDir & "\rzget.bat", $rzcmd)
-				c("waiting for Rzget to load...")
-				ShellExecute($ConfigDir & "\rzget.bat")
-				c("Done !")
+		c("Installing "&GUICtrlRead($hInput2))
+		RunWait('powershell -Command "(& '&$sRZGet&' install '&GUICtrlRead($hInput2)&') | Out-String"', @SystemDir, @SW_SHOW, $STDOUT_CHILD + $STDERR_CHILD)
+		c(GUICtrlRead($hInput2)&"done installing.")
+;		$rzcmd = '@echo off' & @CRLF _
+;				& 'call :isAdmin' & @CRLF _
+;				& 'if %errorlevel% == 0 (' & @CRLF _
+;				& 'goto :run' & @CRLF _
+;				& ') else (' & @CRLF _
+;				& 'echo Requesting administrative privileges...' & @CRLF _
+;				& 'goto :UACPrompt' & @CRLF _
+;				& ')' & @CRLF _
+;				& 'exit /b' & @CRLF _
+;				& ':isAdmin' & @CRLF _
+;				& 'fsutil dirty query %systemdrive% >nul' & @CRLF _
+;				& 'exit /b' & @CRLF _
+;				& ':run' & @CRLF _
+;				& 'cmd /c ' & FileGetShortName(@ScriptDir & "\Ressources\rzget.exe") & " install " & GUICtrlRead($hInput2) & @CRLF _
+;				& 'echo done.' & @CRLF _
+;				& 'exit /b' & @CRLF _
+;				& ':UACPrompt' & @CRLF _
+;				& 'echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"' & @CRLF _
+;				& 'echo UAC.ShellExecute "cmd.exe", "/c %~s0 %~1", "", "runas", 1 >> "%temp%\getadmin.vbs"' & @CRLF _
+;				& '"%temp%\getadmin.vbs"' & @CRLF _
+;				& 'del "%temp%\getadmin.vbs"' & @CRLF _
+;				& 'exit /B'
+;;============================================================================
+;				c("Creating Rzget process...")
+;				FileWrite($ConfigDir & "\rzget.bat", $rzcmd)
+;				c("waiting for Rzget to load...")
+;				ShellExecute($ConfigDir & "\rzget.bat")
+;				c("Done !")
 	Else ; RZGET.EXE WAS NOT FOUND IN CONFIG FOLDER @@@@
 		c("ruckzuck executable not found...")
 	EndIf
@@ -376,13 +668,15 @@ Func _RZCatalog()
 	$sRZCatalog = 0
 	c("Cleared RZ catalog data.")
 	c("Retrieving updated catalog...")
-	Local $Powershell = Run("powershell -Command ((" & $sRZGet & " search | convertfrom-json) | Select ShortName | Out-String -Stream | foreach {$_.trimend()} | Where {$_ -ne ''} | Where {$_ -ne '---------'} | Where {$_ -ne 'ShortName'})", @SystemDir, @SW_HIDE, $STDOUT_CHILD + $STDERR_CHILD)
+	Local $Powershell = Run("powershell -Command ((& " & $sRZGet & " search | convertfrom-json) | Select ShortName | Out-String -Stream | foreach {$_.trimend()} | Where {$_ -ne ''} | Where {$_ -ne '---------'} | Where {$_ -ne 'ShortName'})", @SystemDir, @SW_HIDE, $STDOUT_CHILD + $STDERR_CHILD)
 	ProcessWaitClose($Powershell)
 	$sRZCatalog = StringSplit(StdoutRead($Powershell), @CRLF, 1)
 	Local $ColCount = UBound($sRZCatalog, 1) - 1
 	_ArrayDelete($sRZCatalog, $ColCount) ;Removes the blank line at the end
 	If IsArray($sRZCatalog) = True Then
 		c("Catalog updated.")
+		;_ArraySort($sRZCatalog)
+		c("There are " & $ColCount & " software available for install.")
 		_Main()
 	Else
 		c("Error in updating catalog...")
@@ -447,294 +741,6 @@ Func nas()
 
 EndFunc   ;==>nas
 #EndRegion NAS SCRIPT <<<<<<<<<
-
-#Region  GUI SCRIPT <<<<<<<< @@@@@@@@@@@@@@@@@@@@
-
-Func GUI()
-
-	Global $GUI = GUICreate(@ScriptName & " - Version: " & FileGetVersion(@ScriptFullPath), 1043, 820, -1, -1, -1, -1) ;740,632)
-	GUISetIcon("Icon\gear.ico", $GUI)
-	$tab = GUICtrlCreateTab(0, 0, 697, 541, -1, -1)
-	GUICtrlSetState($tab, $GUI_ONTOP) ;2048
-	GUICtrlCreateTabItem("System Info")
-	GUICtrlCreateTabItem("Configuration")
-	GUICtrlCreateTabItem("Windows Updater")
-	GUICtrlCreateTabItem("")
-	_GUICtrlTab_SetCurFocus($tab, -1)
-	GUICtrlSetResizing(-1, 70)
-
-	#Region GUI setup for Tasks
-	GUICtrlCreateGraphic(705, 45, 300, 455, BitOR($GUI_SS_DEFAULT_GRAPHIC, $SS_WHITEFRAME, $WS_BORDER))
-	GUICtrlSetColor(-1, 0x000000)
-	GUICtrlSetBkColor(-1, 0xFFFFFF)
-	GUICtrlSetGraphic(-1, $GUI_GR_COLOR, 0x000000, 0xFFFFFF)
-	$task[1] = GUICtrlCreateCheckbox("Windows Updater", 710, 48, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-	$task[2] = GUICtrlCreateCheckbox("Install Softwares", 710, 70, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-
-	$hInput2 = GUICtrlCreateInput("", 710, 440, 280, 30)
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-	GUICtrlSetState(-1, $GUI_DISABLE)
-
-	$task[3] = GUICtrlCreateCheckbox("Default = Chrome", 710, 92, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-
-	$task[4] = GUICtrlCreateCheckbox(".pdf/pdfxml = Reader", 710, 114, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-
-	$task[5] = GUICtrlCreateCheckbox("Install OEM + Logo", 710, 136, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-
-	$task[6] = GUICtrlCreateCheckbox("Disable hibernation", 710, 158, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-
-	$task[7] = GUICtrlCreateCheckbox("Copy Office 2010 to C:\", 710, 180, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-
-	$task[8] = GUICtrlCreateCheckbox("Install Office 2010", 710, 202, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-
-	$task[9] = GUICtrlCreateCheckbox("ComputerName", 710, 224, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-
-	$task[10] = GUICtrlCreateCheckbox("Add Office icons to taskbar", 710, 246, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-
-	$task[11] = GUICtrlCreateCheckbox("Select All", 710, 268, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-
-	$sRunTasks = GUICtrlCreateButton("Run", 910, 510, 80, 30)
-
-	$console = _GUICtrlRichEdit_Create($GUI, "", 0, 559, 1043, 258, BitOR($ES_MULTILINE, $WS_VSCROLL, $ES_AUTOVSCROLL)) ;9, 364, 719, 258
-	_GUICtrlRichEdit_SetEventMask($console, $ENM_LINK)
-	_GUICtrlRichEdit_AutoDetectURL($console, True)
-	_GUICtrlRichEdit_SetCharColor($console, 0xFFFFFF)
-	_GUICtrlRichEdit_SetBkColor($console, 0x000000)
-	_GUICtrlRichEdit_SetReadOnly($console, True)
-	_GUICtrlRichEdit_HideSelection($console, True)
-	_GUICtrlRichEdit_SetFont($console, 12, "Consolas")
-
-	$label[0] = GUICtrlCreateLabel("Select tasks to do:", 780, 23, 150, 18, $SS_CENTER, -1)
-	GUICtrlSetFont(-1, 12, 800, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-
-
-
-	GUISwitch($GUI, _GUICtrlTab_SetCurFocus($tab, 1) & GUICtrlRead($tab, 1))
-
-
-	$label[1] = GUICtrlCreateLabel("Manufacturer:", 107, 52, 95)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing($label[1], $GUI_DOCKAUTO)
-	$Manufacturer = GUICtrlCreateInput("", 201, 52, 222, 20, -1, $WS_EX_CLIENTEDGE)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-
-	$label[2] = GUICtrlCreateLabel("Model:", 153, 134)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing($label[2], $GUI_DOCKAUTO)
-	$model = GUICtrlCreateInput("", 201, 132, 222, 20, -1, $WS_EX_CLIENTEDGE)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-
-	$label[3] = GUICtrlCreateLabel("Support Hours:", 100, 194, 95)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	$supportHours = GUICtrlCreateInput("", 201, 192, 218, 20, -1, $WS_EX_CLIENTEDGE)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-
-	$label[4] = GUICtrlCreateLabel("Support Website:", 86, 256, 110)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	$supportUrl = GUICtrlCreateInput("https://", 201, 255, 222, 20, -1, $WS_EX_CLIENTEDGE)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-
-	$OEMLogo = GUICtrlCreateInput("", 201, 319, 222, 20, -1, $WS_EX_CLIENTEDGE)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	$label[5] = GUICtrlCreateLabel("Logo:", 159, 321, 101)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	$oemfile = GUICtrlCreateButton("...", 440, 319, 44, 24, -1, -1)
-	GUICtrlSetFont(-1, 10, 400, 0, "MS sans serif", 2)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-
-	$label[6] = GUICtrlCreateLabel("Computer Name:", 88, 442, 110, 15, -1, -1)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	$compname = GUICtrlCreateInput($Host, 201, 440, 222, 20, -1, $WS_EX_CLIENTEDGE)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-
-	GUISwitch($GUI, _GUICtrlTab_SetCurFocus($tab, 0) & GUICtrlRead($tab, 1))
-
-	Global $iEdit = GUICtrlCreateEdit("", 5, 25, 677, 481, BitOR($ES_AUTOVSCROLL, $ES_READONLY, $ES_MULTILINE, $ES_UPPERCASE, $WS_VSCROLL, $WS_HSCROLL), -1)
-
-	_GetSystemInfo()
-
-	GUISwitch($GUI, _GUICtrlTab_SetCurFocus($tab, 2) & GUICtrlRead($tab, 1))
-
-	$wulv = GUICtrlCreateListView("Descriptions|Status", 17, 192, 647, 334, -1, $WS_EX_CLIENTEDGE)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	_GUICtrlListView_SetColumnWidth($wulv, 0, 500)
-	GUICtrlSetBkColor(-1, $color_silver)
-	GUICtrlSetColor(-1, 0x75EE3B)
-	_GUICtrlListView_SetColumnWidth($wulv, 1, 140)
-	GUICtrlSetBkColor(-1, $color_black)
-	GUICtrlSetColor(-1, 0x75EE3B)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-
-	$label[7] = GUICtrlCreateLabel("Search not started yet", 16, 170, 150, 15, $SS_LEFTNOWORDWRAP)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing($label[7], $GUI_DOCKAUTO)
-	$wup = GUICtrlCreateProgress(16, 142, 649, 20, -1, -1)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-
-	$label[8] = GUICtrlCreateInput("", 16, 90, 300, 40) ;User defined additions to banned list
-	GUICtrlCreateLabel("Use the below box to exclude updates from being applied: (ex. Silverlight)", 16, 55, 310, 40)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-
-	$wus = GUICtrlCreateButton("Search", 500, 80, 100, 30, -1, -1)
-	GUICtrlSetFont(-1, 10, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-
-	GUISwitch($GUI, _GUICtrlTab_SetCurFocus($tab, 1) & GUICtrlRead($tab, 1))
-
-	_GUICtrlTab_SetCurFocus($tab, 0)
-
-	ConsoleWriteGUI($console, "=============== Win10 CONFIGURATOR CONSOLE ===============")
-
-	GUISetState(@SW_SHOW, $GUI)
-;~  return $GUI
-	#EndRegion GUI setup for Tasks
-
-	While 1
-
-		Switch GUIGetMsg()
-
-			Case $GUI_EVENT_CLOSE
-				Exit
-
-			Case $task[11]
-				If GUICtrlRead($task[11]) == $GUI_CHECKED Then
-					For $i = 10 To 1 Step -1
-						GUICtrlSetState($task[$i], $GUI_CHECKED)
-					Next
-					c("All tasks are checked.")
-				ElseIf GUICtrlRead($task[11]) == $GUI_UNCHECKED Then
-					For $i = 10 To 1 Step -1
-						GUICtrlSetState($task[$i], $GUI_UNCHECKED)
-					Next
-					c("All tasks are unckecked.")
-				EndIf
-
-			Case $task[2]
-				If GUICtrlRead($task[2]) == $GUI_Checked Then
-					;If GUICtrlGetState($hInput2) = "144" Then GUICtrlSetState($hInput2, $GUI_ENABLE)
-					If FileExists($ConfigDir & "\rzget.bat") Then FileDelete($configDir & "\rzget.bat")
-					_RZCatalog()
-
-				Else
-					;If GUICtrlGetState($hInput2) = "80" Then GUICtrlSetState($hInput2, $GUI_DISABLE)
-					GUICtrlSetData($hInput2, "") ; input emptied
-				EndIf
-
-
-			Case $sRunTasks
-
-
-				c("Configuration started !")
-
-				If GUICtrlRead($task[2]) == $GUI_Checked Then
-
-					Rzget()
-					GUICtrlSetState($task[2], $GUI_UNCHECKED)
-					GUICtrlSetData($hInput2, "") ; emptied
-				EndIf
-
-				If GUICtrlRead($task[3]) == $GUI_Checked Then
-					c("Setting Chrome as default browser..")
-					defaultBrowser()
-				EndIf
-
-				If GUICtrlRead($task[4]) == $GUI_Checked Then
-					c("Setting .PDF and .PDFXML to Adobe Reader...")
-				EndIf
-
-				If GUICtrlRead($task[5]) == $GUI_Checked Then
-					c("Installing OEM + Logo...")
-					selfoem()
-				EndIf
-
-				If GUICtrlRead($task[6]) == $GUI_Checked Then
-					c("Disabling Hibernation...")
-					;ScreenSaver(True) ;True to disable / false to reset
-				EndIf
-
-				If GUICtrlRead($task[7]) == $GUI_Checked Then
-					c("Adding office 2010 to C:\...")
-				EndIf
-
-				If GUICtrlRead($task[8]) == $GUI_Checked Then
-					c("Installing MS Office 2010...")
-					Office2010()
-				EndIf
-
-				If GUICtrlRead($task[9]) == $GUI_Checked Then
-					c("Changing computer name...")
-					;_SetComputerName() ;Temporarily commented out to prevent changing of name
-				EndIf
-
-				If GUICtrlRead($task[1]) == $GUI_Checked Then
-					c("Running Windows Updater...")
-					_PopulateNeeded($Host)
-				EndIf
-
-				If GUICtrlRead($task[10]) == $GUI_Checked Then
-					c("Adding Office icons to taskbar...")
-				EndIf
-				c("All tasks are completed!")
-
-			Case $wus
-				_PopulateNeeded($Host)
-
-			Case $oemfile
-				$cLogo = FileOpenDialog(@ScriptName, @DesktopDir, "BMP files (*.bmp)", $FD_FILEMUSTEXIST)
-				GUICtrlSetData($OEMLogo, $cLogo)
-		EndSwitch
-	WEnd
-
-EndFunc   ;==>GUI
-#EndRegion  GUI SCRIPT <<<<<<<< @@@@@@@@@@@@@@@@@@@@
 
 #Region SetComputerName <<<<<<<<
 Func _SetComputerName($sCmpName)
