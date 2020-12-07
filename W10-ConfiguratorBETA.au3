@@ -111,6 +111,19 @@ Func GUI()
 	_GUICtrlTab_SetCurFocus($tab, -1)
 	GUICtrlSetResizing(-1, 70)
 
+	;Menu items
+	local $FileMenu = GUICtrlCreateMenu("File")
+	local $FileImp = GUICtrlCreateMenuItem("Import", $FileMenu)
+	GUICtrlSetState(-1, $GUI_DEFBUTTON)
+	local $FileExp = GUICtrlCreateMenuItem("Export",$FileMenu)
+	GUICtrlCreateMenuItem("", $Filemenu, 2) ; create a separator line
+	local $FileEx = GUICtrlCreateMenuItem("Exit",$FileMenu)
+	local $HelpMenu = GUICtrlCreateMenu("Help")
+	local $HelpInfo = GUICtrlCreateMenuItem("Configurator Help",$HelpMenu)
+	local $HelpRep = GUICtrlCreateMenuItem("Report Issue",$HelpMenu)
+	local $HelpGit = GUICtrlCreateMenuItem("GitHub",$HelpMenu)
+	local $HelpAbout = GUICtrlCreateMenuItem("About",$HelpMenu)
+
 	#Region GUI setup for Tasks
 	GUICtrlCreateGraphic(705, 45, 300, 455, BitOR($GUI_SS_DEFAULT_GRAPHIC, $SS_WHITEFRAME, $WS_BORDER))
 	GUICtrlSetColor(-1, 0x000000)
@@ -293,7 +306,20 @@ GUICtrlCreateGroup("Misc",6,235,380,200)
 
 			Case $GUI_EVENT_CLOSE
 				Exit
-
+			Case $FileEx
+				Exit
+			Case $FileImp
+				_ImportIni()
+			Case $FileExp
+				_Exportini()
+			Case $HelpAbout
+				MsgBox(8256, "About","Windows 10 Configurator was created as a project to help auotmate some repitive tasks being used by Network Administrators, Helpdesk personnel, etc.")
+			Case $HelpGit
+				ShellExecute("https://github.com/Jivaross/W10-Configurator")
+			Case $HelpInfo
+				MsgBox(8224, "Configurator Help","Insert halp Text here.")
+			Case $HelpRep
+				ShellExecute("https://github.com/Jivaross/W10-Configurator/issues")
 			Case $task[11]
 				If GUICtrlRead($task[11]) == $GUI_CHECKED Then
 					For $i = 10 To 1 Step -1
@@ -458,7 +484,7 @@ Func _Main()
 		EndIf
 		If $sChosen <> "" Then
 			GUICtrlSendMsg($hInput, 0x00B1, $aCurrSelected[0], $aCurrSelected[1]) ; $EM_SETSEL.
-			_InsertText($hInput, '"' &$sChosen & '" ')
+			_InsertText($hInput, "'" &$sChosen & "' ")
 			$sCurrInput = GUICtrlRead($hInput)
 			GUIDelete($hListGUI)
 			$hListGUI = -1
@@ -577,6 +603,15 @@ Func ini($section, $key, $value, $iniread = True) ;Read or edit value in config.
 	EndSwitch
 
 EndFunc   ;==>ini
+Func _ImportIni()
+	C("Importing settings...")
+	$iniFile = FileOpenDialog("Choose File...", @WorkingDir, "Config files (*.ini)")
+	;Set values of check mark boxes, text boxes, etc. based on sections read within ini file array using inireadsection (creates 2d array) or iniread (reads single key value)
+EndFunc
+Func _ExportIni()
+	c("Exporting settings...")
+	;Add in ini file export items.
+EndFunc
 #EndRegion INI READ/WRITE
 
 Func selfoem() ;**** AutoIt version of oem() ****
