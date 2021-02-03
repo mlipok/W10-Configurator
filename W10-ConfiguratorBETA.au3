@@ -164,34 +164,24 @@ Func GUI()
 	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
 	GUICtrlSetBkColor(-1, $COLOR_WHITE)
 
-	$task[7] = GUICtrlCreateCheckbox("Copy Office 2010 to C:\", 710, 180, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	$task[7] = GUICtrlCreateCheckbox("ComputerName", 710, 180, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
 	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
 	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
 	GUICtrlSetBkColor(-1, $COLOR_WHITE)
 
-	$task[8] = GUICtrlCreateCheckbox("Install Office 2010", 710, 202, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	$task[8] = GUICtrlCreateCheckbox("Add Office icons to taskbar", 710, 202, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
 	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
 	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
 	GUICtrlSetBkColor(-1, $COLOR_WHITE)
 
-	$task[9] = GUICtrlCreateCheckbox("ComputerName", 710, 224, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-
-	$task[10] = GUICtrlCreateCheckbox("Add Office icons to taskbar", 710, 246, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
-	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
-	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
-	GUICtrlSetBkColor(-1, $COLOR_WHITE)
-
-	$task[11] = GUICtrlCreateCheckbox("Select All", 710, 268, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	$task[9] = GUICtrlCreateCheckbox("Select All", 710, 224, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
 	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
 	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
 	GUICtrlSetBkColor(-1, $COLOR_WHITE)
 
 	$sRunTasks = GUICtrlCreateButton("Run", 910, 510, 80, 30)
 
-	$console = _GUICtrlRichEdit_Create($GUI, "", 0, 559, 1043, 258, BitOR($ES_MULTILINE, $WS_VSCROLL, $ES_AUTOVSCROLL)) ;9, 364, 719, 258
+	$console = _GUICtrlRichEdit_Create($GUI, "", 0, 559, 1043, 278, BitOR($ES_MULTILINE, $WS_VSCROLL, $ES_AUTOVSCROLL)) ;9, 364, 719, 258
 	_GUICtrlRichEdit_SetEventMask($console, $ENM_LINK)
 	_GUICtrlRichEdit_AutoDetectURL($console, True)
 	_GUICtrlRichEdit_SetCharColor($console, 0xFFFFFF)
@@ -320,13 +310,13 @@ GUICtrlCreateGroup("Misc",6,235,380,200)
 				MsgBox(8224, "Configurator Help","Insert halp Text here.")
 			Case $HelpRep
 				ShellExecute("https://github.com/Jivaross/W10-Configurator/issues")
-			Case $task[11]
-				If GUICtrlRead($task[11]) == $GUI_CHECKED Then
+			Case $task[9]
+				If GUICtrlRead($task[9]) == $GUI_CHECKED Then
 					For $i = 10 To 1 Step -1
 						GUICtrlSetState($task[$i], $GUI_CHECKED)
 					Next
 					c("All tasks are checked.")
-				ElseIf GUICtrlRead($task[11]) == $GUI_UNCHECKED Then
+				ElseIf GUICtrlRead($task[9]) == $GUI_UNCHECKED Then
 					For $i = 10 To 1 Step -1
 						GUICtrlSetState($task[$i], $GUI_UNCHECKED)
 					Next
@@ -349,6 +339,11 @@ GUICtrlCreateGroup("Misc",6,235,380,200)
 
 
 				c("Configuration started !")
+
+				If GUICtrlRead($task[1]) == $GUI_Checked Then
+					c("Running Windows Updater...")
+					_PopulateNeeded($Host)
+				EndIf
 
 				If GUICtrlRead($task[2]) == $GUI_Checked Then
 
@@ -377,25 +372,11 @@ GUICtrlCreateGroup("Misc",6,235,380,200)
 				EndIf
 
 				If GUICtrlRead($task[7]) == $GUI_Checked Then
-					c("Adding office 2010 to C:\...")
-				EndIf
-
-				If GUICtrlRead($task[8]) == $GUI_Checked Then
-					c("Installing MS Office 2010...")
-					Office2010()
-				EndIf
-
-				If GUICtrlRead($task[9]) == $GUI_Checked Then
 					c("Changing computer name...")
 					;_SetComputerName() ;Temporarily commented out to prevent changing of name
 				EndIf
 
-				If GUICtrlRead($task[1]) == $GUI_Checked Then
-					c("Running Windows Updater...")
-					_PopulateNeeded($Host)
-				EndIf
-
-				If GUICtrlRead($task[10]) == $GUI_Checked Then
+				If GUICtrlRead($task[8]) == $GUI_Checked Then
 					c("Adding Office icons to taskbar...")
 				EndIf
 				c("All tasks are completed!")
@@ -642,7 +623,7 @@ Func Rzget()
 	If FileExists($ConfigDir & "\rzget.exe") Then ; IF RZGET IS IN CONFIG FOLDER @@@@
 		_CheckRZGetVersion()
 		c("Installing "&GUICtrlRead($hInput2))
-		RunWait('powershell -Command "(& '&$sRZGet&' install '&GUICtrlRead($hInput2)&') | Out-String"', @SystemDir, @SW_SHOW, $STDOUT_CHILD + $STDERR_CHILD)
+		RunWait('powershell -Command "& ' & $sRZGet & ' install ' & GUICtrlRead($hInput2) & ') | Out-String"', @SystemDir, @SW_HIDE, $STDOUT_CHILD + $STDERR_CHILD)
 		c(GUICtrlRead($hInput2)&"done installing.")
 ;		$rzcmd = '@echo off' & @CRLF _
 ;				& 'call :isAdmin' & @CRLF _
