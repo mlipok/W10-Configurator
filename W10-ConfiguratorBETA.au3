@@ -33,6 +33,7 @@
 #include <GuiListBox.au3>
 #include <FontConstants.au3>
 #include <GuiRichEdit.au3>
+#include <GuiEdit.au3>
 #include <GuiTab.au3>
 #include <GuiListView.au3>
 #include <String.au3>
@@ -47,7 +48,7 @@
 Opt("GUIResizeMode", $GUI_DOCKAUTO)
 
 
-#Region DECLARE VARIABLES  FOR LATER USE
+#Region DECLARE VARIABLES FOR LATER USE  (UNUSED/MISSING VARIABLES IN THIS LIST MAY POSSIBLE)
 
 Global  $ColCount, $ConfigDir = @ScriptDir & "\Ressources"
 Global $hGUI, $hList, $hInput, $aSelected, $sChosen, $hUP, $hDOWN, $hENTER, $hESC
@@ -86,7 +87,9 @@ Global $sBannedList
 Global $BannedList
 Global $label[10]
 Global $task[15]
-Global $hInput2
+Global $sRunTasks
+Global $hInput
+Global $RZUpdated = False
 Global $sRZVersion ;Local RZGet Version
 Global $sORZVersion ;Online RZGet Version
 Global $sRZCatalog ;RZ Catalog
@@ -138,7 +141,7 @@ Func GUI()
 	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
 	GUICtrlSetBkColor(-1, $COLOR_WHITE)
 
-	$hInput2 = GUICtrlCreateInput("", 710, 440, 280, 30)
+	$hInput = GUICtrlCreateInput("", 710, 440, 280, 30)
 	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
 	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
 	GUICtrlSetBkColor(-1, $COLOR_WHITE)
@@ -159,29 +162,34 @@ Func GUI()
 	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
 	GUICtrlSetBkColor(-1, $COLOR_WHITE)
 
-	$task[6] = GUICtrlCreateCheckbox("Disable hibernation", 710, 158, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	$task[6] = GUICtrlCreateCheckbox("Disable Hibernation", 710, 158, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
 	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
 	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
 	GUICtrlSetBkColor(-1, $COLOR_WHITE)
 
-	$task[7] = GUICtrlCreateCheckbox("ComputerName", 710, 180, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	$task[7] = GUICtrlCreateCheckbox("Install Office 365", 710, 180, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
 	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
 	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
 	GUICtrlSetBkColor(-1, $COLOR_WHITE)
 
-	$task[8] = GUICtrlCreateCheckbox("Add Office icons to taskbar", 710, 202, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	$task[8] = GUICtrlCreateCheckbox("Change Computer Name", 710, 202, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
 	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
 	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
 	GUICtrlSetBkColor(-1, $COLOR_WHITE)
 
-	$task[9] = GUICtrlCreateCheckbox("Select All", 710, 224, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	$task[9] = GUICtrlCreateCheckbox("Add Office icons to taskbar", 710, 224, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
+	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
+	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+
+	$task[10] = GUICtrlCreateCheckbox("Select All", 710, 246, 260, 20, BitOR($TVS_DISABLEDRAGDROP, $TVS_CHECKBOXES))
 	GUICtrlSetFont(-1, 13, 400, 0, "Lucida Bright", 5)
 	GUICtrlSetResizing(-1, $GUI_DOCKAUTO)
 	GUICtrlSetBkColor(-1, $COLOR_WHITE)
 
 	$sRunTasks = GUICtrlCreateButton("Run", 910, 510, 80, 30)
 
-	$console = _GUICtrlRichEdit_Create($GUI, "", 0, 559, 1043, 278, BitOR($ES_MULTILINE, $WS_VSCROLL, $ES_AUTOVSCROLL)) ;9, 364, 719, 258
+	$console = _GUICtrlRichEdit_Create($GUI, "", 0, 549, 1040, 248, BitOR($ES_MULTILINE, $WS_VSCROLL, $ES_AUTOVSCROLL)) ;9, 364, 719, 258
 	_GUICtrlRichEdit_SetEventMask($console, $ENM_LINK)
 	_GUICtrlRichEdit_AutoDetectURL($console, True)
 	_GUICtrlRichEdit_SetCharColor($console, 0xFFFFFF)
@@ -296,27 +304,35 @@ GUICtrlCreateGroup("Misc",6,235,380,200)
 
 			Case $GUI_EVENT_CLOSE
 				Exit
+
 			Case $FileEx
 				Exit
+
 			Case $FileImp
 				_ImportIni()
+
 			Case $FileExp
 				_Exportini()
+
 			Case $HelpAbout
-				MsgBox(8256, "About","Windows 10 Configurator was created as a project to help auotmate some repitive tasks being used by Network Administrators, Helpdesk personnel, etc.")
+				MsgBox(8256, "About","Windows 10 Configurator was created as a project to help auotmate some repetitive tasks being used by Network Administrators, Helpdesk personnel, etc.")
+
 			Case $HelpGit
 				ShellExecute("https://github.com/Jivaross/W10-Configurator")
+
 			Case $HelpInfo
-				MsgBox(8224, "Configurator Help","Insert halp Text here.")
+				MsgBox(8224, "Configurator Help","Insert help Text here.")
+
 			Case $HelpRep
 				ShellExecute("https://github.com/Jivaross/W10-Configurator/issues")
-			Case $task[9]
-				If GUICtrlRead($task[9]) == $GUI_CHECKED Then
+
+			Case $task[10]
+				If GUICtrlRead($task[10]) == $GUI_CHECKED Then
 					For $i = 10 To 1 Step -1
 						GUICtrlSetState($task[$i], $GUI_CHECKED)
 					Next
 					c("All tasks are checked.")
-				ElseIf GUICtrlRead($task[9]) == $GUI_UNCHECKED Then
+				ElseIf GUICtrlRead($task[10]) == $GUI_UNCHECKED Then
 					For $i = 10 To 1 Step -1
 						GUICtrlSetState($task[$i], $GUI_UNCHECKED)
 					Next
@@ -325,18 +341,30 @@ GUICtrlCreateGroup("Misc",6,235,380,200)
 
 			Case $task[2]
 				If GUICtrlRead($task[2]) == $GUI_Checked Then
-					;If GUICtrlGetState($hInput2) = "144" Then GUICtrlSetState($hInput2, $GUI_ENABLE)
-					;If FileExists($ConfigDir & "\rzget.bat") Then FileDelete($configDir & "\rzget.bat")
-					_RZCatalog()
+					If GUICtrlGetState($hInput) = "144" Then GUICtrlSetState($hInput, $GUI_ENABLE)
+
+					If $sRZCatalog= BitAND("", 0 , -1) Then
+						_RZCatalog()
+					Else
+						AdlibRegister("AutoComplete")
+					EndIf
 
 				Else
-					;If GUICtrlGetState($hInput2) = "80" Then GUICtrlSetState($hInput2, $GUI_DISABLE)
-					GUICtrlSetData($hInput2, "") ; input emptied
+					If GUICtrlGetState($hInput) = "80" Then GUICtrlSetState($hInput, $GUI_DISABLE)
+					GUICtrlSetData($hInput, "") ; input emptied
+					AdlibUnRegister("AutoComplete")
+
 				EndIf
 
 
 			Case $sRunTasks
-
+				Local $tasks=0
+				For $i = 1 to 10 Step 1
+					If GUICtrlRead($task[$i]) == $GUI_CHECKED Then $tasks +=1
+					Next
+					If $tasks < 1 Then
+						cw("Choose tasks you want to execute before starting configuration!")
+					Else
 
 				c("Configuration started !")
 
@@ -349,12 +377,12 @@ GUICtrlCreateGroup("Misc",6,235,380,200)
 
 					Rzget()
 					GUICtrlSetState($task[2], $GUI_UNCHECKED)
-					GUICtrlSetData($hInput2, "") ; emptied
+					GUICtrlSetData($hInput, "") ; emptied
 				EndIf
 
 				If GUICtrlRead($task[3]) == $GUI_Checked Then
 					c("Setting Chrome as default browser..")
-					defaultBrowser()
+
 				EndIf
 
 				If GUICtrlRead($task[4]) == $GUI_Checked Then
@@ -363,23 +391,32 @@ GUICtrlCreateGroup("Misc",6,235,380,200)
 
 				If GUICtrlRead($task[5]) == $GUI_Checked Then
 					c("Installing OEM + Logo...")
-					selfoem()
+					selfoem() ;WORK
 				EndIf
 
 				If GUICtrlRead($task[6]) == $GUI_Checked Then
 					c("Disabling Hibernation...")
-					;ScreenSaver(True) ;True to disable / false to reset
+					;>>>>>(UNTESTED)<<<< ScreenSaver(True) ;True to disable / false to reset
 				EndIf
 
+
+
 				If GUICtrlRead($task[7]) == $GUI_Checked Then
-					c("Changing computer name...")
-					;_SetComputerName() ;Temporarily commented out to prevent changing of name
+					c("Installing MS Office 365...")
+					Office2010()
 				EndIf
 
 				If GUICtrlRead($task[8]) == $GUI_Checked Then
+					c("Changing computer name...")
+					;>>>>>(UNTESTED)<<<< _SetComputerName() ;Temporarily commented out to prevent changing of name
+				EndIf
+
+				If GUICtrlRead($task[9]) == $GUI_Checked Then
 					c("Adding Office icons to taskbar...")
 				EndIf
-				c("All tasks are completed!")
+				c("All selected tasks are completed!")
+
+			EndIf
 
 			Case $wus
 				_PopulateNeeded($Host)
@@ -387,93 +424,123 @@ GUICtrlCreateGroup("Misc",6,235,380,200)
 			Case $oemfile
 				$cLogo = FileOpenDialog(@ScriptName, @DesktopDir, "BMP files (*.bmp)", $FD_FILEMUSTEXIST)
 				GUICtrlSetData($OEMLogo, $cLogo)
+
+
 		EndSwitch
 	WEnd
 
 EndFunc   ;==>GUI
 #EndRegion  GUI SCRIPT <<<<<<<< @@@@@@@@@@@@@@@@@@@@
 
-Func _Main()
+Func AutoComplete() ; FUNCTION WHICH
 
+	debug("Input focused? : " & _IsFocused($GUI, $hInput))
+		$hUP = GUICtrlCreateDummy()
+		$hDOWN = GUICtrlCreateDummy()
+		$hENTER = GUICtrlCreateDummy()
+		$hESC = GUICtrlCreateDummy()
+		Dim $AccelKeys[4][2] = [["{UP}", $hUP], ["{DOWN}", $hDOWN], ["{ENTER}", $hENTER], ["{ESC}", $hESC]]
+		GUISetAccelerators($AccelKeys)
 
-	$hGUI = GUICreate("Software Selector", 300, 100)
-	GUICtrlCreateLabel("Start to type letters and I'll suggest softwares:", 10, 10, 280, 20)
-	$hInput = GUICtrlCreateInput("", 10, 40, 280, 20)
-	$hButton = GUICtrlCreateButton("Choose", 250, 70)
-	GUISetState(@SW_SHOW, $hGUI)
+	While _IsFocused($GUI, $hInput) = True
 
-	$hUP = GUICtrlCreateDummy()
-	$hDOWN = GUICtrlCreateDummy()
-	$hENTER = GUICtrlCreateDummy()
-	$hESC = GUICtrlCreateDummy()
-	Dim $AccelKeys[4][2] = [["{UP}", $hUP], ["{DOWN}", $hDOWN], ["{ENTER}", $hENTER], ["{ESC}", $hESC]]
-	GUISetAccelerators($AccelKeys)
+		Do
 
-	While 1
-		Switch GUIGetMsg()
-			Case $GUI_EVENT_CLOSE
-				ExitLoop
-			Case $hButton
-				GUICtrlSetData($hInput2, GUICtrlRead($hInput))
-				ExitLoop
-			Case $hESC
+			Switch GUIGetMsg()
+
+				Case $GUI_EVENT_CLOSE
+					Exit
+
+				Case $hESC
+					If $hListGUI <> -1 Then ; List is visible.
+						GUIDelete($hListGUI)
+						$hListGUI = -1
+
+					Else
+
+						$mBox=MsgBox( 4, @ScriptName, "Do you want to quit application?")
+						Select
+							Case $mBox = 6
+								Exit
+							Case $mBox = 7
+								ExitLoop
+						EndSelect
+
+					EndIf
+
+				Case $hUP
+					If $hListGUI <> -1 Then ; List is visible.
+						$iCurrIndex -= 1
+						If $iCurrIndex < 0 Then
+							$iCurrIndex = 0
+						EndIf
+						_GUICtrlListBox_SetCurSel($hList, $iCurrIndex)
+					EndIf
+
+				Case $hDOWN
+					If $hListGUI <> -1 Then ; List is visible.
+						$iCurrIndex += 1
+						If $iCurrIndex > _GUICtrlListBox_GetCount($hList) - 1 Then
+							$iCurrIndex = _GUICtrlListBox_GetCount($hList) - 1
+						EndIf
+						_GUICtrlListBox_SetCurSel($hList, $iCurrIndex)
+					EndIf
+
+				Case $hENTER
+					If $hListGUI <> -1 And $iCurrIndex <> -1 Then ; List is visible and a item is selected.
+						$sChosen = _GUICtrlListBox_GetText($hList, $iCurrIndex)
+					EndIf
+
+				Case $hList
+					$sChosen = GUICtrlRead($hList)
+
+			EndSwitch
+
+			Sleep(10)
+			$aSelected = _GetSelectionPointers($hInput)
+			If GUICtrlRead($hInput) <> $sCurrInput Or $aSelected[1] <> $aCurrSelected[1] Then ; Input content or pointer are changed.
+				$sCurrInput = GUICtrlRead($hInput)
+				$aCurrSelected = $aSelected ; Get pointers of the string to replace.
+				$iCurrIndex = -1
 				If $hListGUI <> -1 Then ; List is visible.
 					GUIDelete($hListGUI)
 					$hListGUI = -1
-				Else
-					ExitLoop
 				EndIf
-
-			Case $hUP
-				If $hListGUI <> -1 Then ; List is visible.
-					$iCurrIndex -= 1
-					If $iCurrIndex < 0 Then
-						$iCurrIndex = 0
-					EndIf
-					_GUICtrlListBox_SetCurSel($hList, $iCurrIndex)
-				EndIf
-
-			Case $hDOWN
-				If $hListGUI <> -1 Then ; List is visible.
-					$iCurrIndex += 1
-					If $iCurrIndex > _GUICtrlListBox_GetCount($hList) - 1 Then
-						$iCurrIndex = _GUICtrlListBox_GetCount($hList) - 1
-					EndIf
-					_GUICtrlListBox_SetCurSel($hList, $iCurrIndex)
-				EndIf
-
-			Case $hENTER
-				If $hListGUI <> -1 And $iCurrIndex <> -1 Then ; List is visible and a item is selected.
-					$sChosen = _GUICtrlListBox_GetText($hList, $iCurrIndex)
-				EndIf
-
-			Case $hList
-				$sChosen = GUICtrlRead($hList)
-		EndSwitch
-
-		Sleep(10)
-		$aSelected = _GetSelectionPointers($hInput)
-		If GUICtrlRead($hInput) <> $sCurrInput Or $aSelected[1] <> $aCurrSelected[1] Then ; Input content or pointer are changed.
-			$sCurrInput = GUICtrlRead($hInput)
-			$aCurrSelected = $aSelected ; Get pointers of the string to replace.
-			$iCurrIndex = -1
-			If $hListGUI <> -1 Then ; List is visible.
+				$hList = _PopupSelector($GUI, $hListGUI, _CheckInputText($sCurrInput, $aCurrSelected)) ; ByRef $hListGUI, $aCurrSelected.
+			EndIf
+			If $sChosen <> "" Then
+				GUICtrlSendMsg($hInput, 0x00B1, $aCurrSelected[0], $aCurrSelected[1]) ; $EM_SETSEL.
+				_InsertText($hInput, "'" & $sChosen & "' ")
+				$sCurrInput = GUICtrlRead($hInput)
 				GUIDelete($hListGUI)
 				$hListGUI = -1
+				$sChosen = ""
 			EndIf
-			$hList = _PopupSelector($hGUI, $hListGUI, _CheckInputText($sCurrInput, $aCurrSelected)) ; ByRef $hListGUI, $aCurrSelected.
-		EndIf
-		If $sChosen <> "" Then
-			GUICtrlSendMsg($hInput, 0x00B1, $aCurrSelected[0], $aCurrSelected[1]) ; $EM_SETSEL.
-			_InsertText($hInput, "'" &$sChosen & "' ")
-			$sCurrInput = GUICtrlRead($hInput)
-			GUIDelete($hListGUI)
-			$hListGUI = -1
-			$sChosen = ""
-		EndIf
+			If _IsFocused($GUI,$sRunTasks) = True Then ExitLoop
+
+		Until _IsFocused($GUI,$hInput) = False And _IsFocused($hListGUI, $hList) = False
+
+		Select
+
+			Case _IsFocused($GUI, $hInput) = False And _IsFocused($hListGUI, $hList) = False
+				If $hListGUI <> -1 Then
+					GUIDelete($hListGUI)
+					$hListGUI = -1
+					ExitLoop
+				EndIf
+		EndSelect
+
+
 	WEnd
-	GUIDelete($hGUI)
-EndFunc   ;==>_Main
+
+EndFunc
+
+
+
+Func _IsFocused($h_Wnd, $i_ControlID) ; Check if control has focus.
+    Return ControlGetHandle($h_Wnd, '', $i_ControlID) = ControlGetHandle($h_Wnd, '', ControlGetFocus($h_Wnd))
+EndFunc
+
 Func _CheckInputText($sCurrInput, ByRef $aSelected)
 	Local $sPartialData = ""
 	If (IsArray($aSelected)) And ($aSelected[0] <= $aSelected[1]) Then
@@ -491,14 +558,14 @@ Func _CheckInputText($sCurrInput, ByRef $aSelected)
 	Return $sPartialData
 EndFunc   ;==>_CheckInputText
 
-Func _PopupSelector($hGUI, ByRef $hListGUI, $sCurr_List)
+Func _PopupSelector($GUI, ByRef $hListGUI, $sCurr_List) ; FUNCTION THAT CREATE SUGGESTIONBOX WITH SOFTWARES AVAILABLE
 
 	Local $hList = -1
 	If $sCurr_List = "" Then
 		Return $hList
 	EndIf
-	$hListGUI = GUICreate("", 280, 360, 10, 62, $WS_POPUP, BitOR($WS_EX_TOOLWINDOW, $WS_EX_TOPMOST, $WS_EX_MDICHILD), $hGUI)
-	$hList = GUICtrlCreateList("", 0, 0, 280, 350, BitOR(0x00100000, 0x00200000))
+	$hListGUI = GUICreate("", 710, 480, 710, 475, $WS_POPUP, BitOR($WS_EX_TOOLWINDOW, $WS_EX_TOPMOST, $WS_EX_MDICHILD), $GUI) ; 280, 360
+	$hList = GUICtrlCreateList("", 0, 0, 280, 350, BitOR($LBS_DISABLENOSCROLL, $LBS_SORT))
 	GUICtrlSetData($hList, $sCurr_List)
 	GUISetControlsVisible($hListGUI) ; To Make Control Visible And Window Invisible.
 	GUISetState(@SW_SHOWNOACTIVATE, $hListGUI)
@@ -538,6 +605,31 @@ Func GUISetControlsVisible($hWnd) ; By Melba23.
 EndFunc   ;==>GUISetControlsVisible
 
 
+#region Console
+Func ConsoleSetCharColorNoSelection($hWnd, $iColor = Default)
+If Not IsHWnd($hWnd) Then Return SetError(101, 0, False)
+
+Local $tCharFormat = DllStructCreate($tagCHARFORMAT)
+DllStructSetData($tCharFormat, 1, DllStructGetSize($tCharFormat))
+If IsKeyword($iColor) Then
+DllStructSetData($tCharFormat, 3, $CFE_AUTOCOLOR)
+$iColor = 0
+Else
+If BitAND($iColor, 0xff000000) Then Return SetError(1022, 0, False)
+EndIf
+
+DllStructSetData($tCharFormat, 2, $CFM_COLOR)
+DllStructSetData($tCharFormat, 6, $iColor)
+
+Return _SendMessage($hWnd, $EM_SETCHARFORMAT, $SCF_SELECTION, DllStructGetPtr($tCharFormat)) <> 0
+
+EndFunc
+
+Func debug($cw)
+ConsoleWrite(_NowTime() & " =-> " & $cw & @CRLF)
+EndFunc
+
+
 Func c($cw) ;INFORMATIVE MESSAGES IN CONSOLE
 	$c = 0
 	ConsoleWrite($cw & @CRLF)
@@ -551,19 +643,23 @@ Func cw($cwe) ; @@@@ CONSOLE WARNINGS / ERRORS MESSAGE @@@@@
 EndFunc   ;==>cw
 
 Func ConsoleWriteGUI(Const ByRef $hConsole, Const $sTxt) ; READ C($cw) & cw($cw) ($cwe_ soon)
-	_GUICtrlRichEdit_GotoCharPos($console, -1)
+	;_GUICtrlRichEdit_GotoCharPos($console, -1)
 	If $c = 1 Then
-		_GUICtrlRichEdit_SetCharColor($console, 0x0000FF)
-		_GUICtrlRichEdit_InsertText($console, $sTxt)
+		_GUICtrlRichEdit_SetFont($console, 12, "Consolas")
+		ConsoleSetCharColorNoSelection($console, 0x0000FF)
+		_GUICtrlEdit_AppendText($console, $sTxt)
+		_GUICtrlRichEdit_ScrollLines($console, 1)
 	Else
-		_GUICtrlRichEdit_SetCharColor($console, 0xFFFFFF)
-		_GUICtrlRichEdit_InsertText($console, $sTxt)
+		_GUICtrlRichEdit_SetFont($console, 12, "Consolas")
+		ConsoleSetCharColorNoSelection($console, 0xFFFFFF)
+		_GUICtrlEdit_AppendText($console, $sTxt)
+		_GUICtrlRichEdit_ScrollLines($console, 1)
 	EndIf
+	;_GUICtrlRichEdit_GotoCharPos($console, -1)
+;	_GUICtrlRichEdit_HideSelection($console, True)
 
-	_GUICtrlRichEdit_SetFont($console, 12, "Consolas")
-
-	_GUICtrlRichEdit_HideSelection($console, True)
 EndFunc   ;==>ConsoleWriteGUI
+#EndRegion Console
 
 
 #Region INI READ/WRITE
@@ -616,47 +712,35 @@ Func selfoem() ;**** AutoIt version of oem() ****
 EndFunc   ;==>selfoem
 
 
-#Region RZGET <<<  Work flawless (RZGet is another solution like Ninite which offers a variety of softwares to download & install)
+#Region RZGET <<<
 Func Rzget()
-	Local $rzcmd
 
-	If FileExists($ConfigDir & "\rzget.exe") Then ; IF RZGET IS IN CONFIG FOLDER @@@@
-		_CheckRZGetVersion()
-		c("Installing "&GUICtrlRead($hInput2))
-		RunWait('powershell -Command "& ' & $sRZGet & ' install ' & GUICtrlRead($hInput2) & ') | Out-String"', @SystemDir, @SW_HIDE, $STDOUT_CHILD + $STDERR_CHILD)
-		c(GUICtrlRead($hInput2)&"done installing.")
-;		$rzcmd = '@echo off' & @CRLF _
-;				& 'call :isAdmin' & @CRLF _
-;				& 'if %errorlevel% == 0 (' & @CRLF _
-;				& 'goto :run' & @CRLF _
-;				& ') else (' & @CRLF _
-;				& 'echo Requesting administrative privileges...' & @CRLF _
-;				& 'goto :UACPrompt' & @CRLF _
-;				& ')' & @CRLF _
-;				& 'exit /b' & @CRLF _
-;				& ':isAdmin' & @CRLF _
-;				& 'fsutil dirty query %systemdrive% >nul' & @CRLF _
-;				& 'exit /b' & @CRLF _
-;				& ':run' & @CRLF _
-;				& 'cmd /c ' & FileGetShortName(@ScriptDir & "\Ressources\rzget.exe") & " install " & GUICtrlRead($hInput2) & @CRLF _
-;				& 'echo done.' & @CRLF _
-;				& 'exit /b' & @CRLF _
-;				& ':UACPrompt' & @CRLF _
-;				& 'echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"' & @CRLF _
-;				& 'echo UAC.ShellExecute "cmd.exe", "/c %~s0 %~1", "", "runas", 1 >> "%temp%\getadmin.vbs"' & @CRLF _
-;				& '"%temp%\getadmin.vbs"' & @CRLF _
-;				& 'del "%temp%\getadmin.vbs"' & @CRLF _
-;				& 'exit /B'
-;;============================================================================
-;				c("Creating Rzget process...")
-;				FileWrite($ConfigDir & "\rzget.bat", $rzcmd)
-;				c("waiting for Rzget to load...")
-;				ShellExecute($ConfigDir & "\rzget.bat")
-;				c("Done !")
+	If FileExists(@ScriptDir & "\ressources\rzget.exe") Then ; IF RZGET IS IN CONFIG FOLDER @@@@
+		;_CheckRZGetVersion()
+		AdlibUnRegister("AutoComplete")
+
+		$Powershell = Run('powershell -Command "& '& $sRZGet &' install '& GUICtrlRead($hInput), @SystemDir, @SW_HIDE, $STDERR_MERGED)
+		While 1
+
+        $sStreamOut = StdoutRead($Powershell)
+
+        If @error Then
+            ExitLoop
+        Else
+			$ReplaceStream = StringRegExpReplace($sStreamOut, '[\s]*$|([\n\r]){2,}', '$1')
+			If StringLen($ReplaceStream) > 1 Then c($ReplaceStream)
+
+        EndIf
+
+        Sleep(100)
+
+		WEnd
+
+	c("Done!")
+
 	Else ; RZGET.EXE WAS NOT FOUND IN CONFIG FOLDER @@@@
-		c("ruckzuck executable not found...")
+		c("W10-Configurator Ressources Folder is missing required dependencies.")
 	EndIf
-	GUICtrlSetData($hInput2, "")
 EndFunc   ;==>Rzget
 
 Func _GetOnlineRZVersion()
@@ -681,25 +765,36 @@ Func _CheckRZGetVersion()
 EndFunc   ;==>_CheckRZGetVersion
 
 Func _RZCatalog()
-	$sRZCatalog = 0
-	c("Cleared RZ catalog data.")
-	c("Retrieving updated catalog...")
-	Local $Powershell = Run("powershell -Command ((& " & $sRZGet & " search | convertfrom-json) | Select ShortName | Out-String -Stream | foreach {$_.trimend()} | Where {$_ -ne ''} | Where {$_ -ne '---------'} | Where {$_ -ne 'ShortName'})", @SystemDir, @SW_HIDE, $STDOUT_CHILD + $STDERR_CHILD)
+If $RZUpdated = False Then
+
+		c("Retrieving catalog, this may take few seconds...")
+	Else
+
+		c($sRZCatalog[0] & " softwares available, if you want to refresh the list, restart application.")
+	EndIf
+
+	Local $Powershell = Run("powershell -Command ((&" & $sRZGet & " search | convertfrom-json) | Select ShortName | Out-String -Stream | foreach {$_.trimend()} | Where {$_ -ne ''} | Where {$_ -ne '---------'} | Where {$_ -ne 'ShortName'})", @SystemDir, @SW_HIDE, $STDERR_MERGED)
 	ProcessWaitClose($Powershell)
 	$sRZCatalog = StringSplit(StdoutRead($Powershell), @CRLF, 1)
+
+	If $sRZCatalog=Null Then c(StderrRead($Powershell))
+
 	Local $ColCount = UBound($sRZCatalog, 1) - 1
 	_ArrayDelete($sRZCatalog, $ColCount) ;Removes the blank line at the end
-	If IsArray($sRZCatalog) = True Then
-		c("Catalog updated.")
-		;_ArraySort($sRZCatalog)
-		c("There are " & $ColCount & " software available for install.")
-		_Main()
+
+	If Not $sRZCatalog = Null Or IsArray($sRZCatalog) = True Then
+		$RZUpdated = True
+		c("Retrieve complete, " & $sRZCatalog[0] & " softwares has been found.")
+		AdlibRegister("AutoComplete")
 	Else
-		c("Error in updating catalog...")
+
+		c("Unable to retrieve catalog...")
 	EndIf
 
 EndFunc   ;==>_RZCatalog
-#EndRegion RZGET <<<  Work flawless (RZGet is another solution like Ninite which offers a variety of softwares to download & install)
+
+
+#EndRegion RZGET <<<
 
 #Region SCREENSAVER
 Func ScreenSaver($Alive) ;False = reset to default & True to prevent/disable sleep/power-savings modes (AND screensaver)
