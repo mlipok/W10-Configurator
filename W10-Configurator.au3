@@ -48,8 +48,6 @@
 #include <APIDiagConstants.au3>
 #include ".\Ressources\UDF\MS-Store.au3"
 #include ".\Ressources\UDF\choco.au3"
-#include ".\Ressources\UDF\ExportConfig.au3"
-#include ".\Ressources\UDF\importConfig.au3"
 Opt("GUIResizeMode", $GUI_DOCKAUTO)
 
 #EndRegion Includes <<<<<<<<
