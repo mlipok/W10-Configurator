@@ -5,7 +5,7 @@
 
 ;~ Local $lenovoPart1_example = "E046963F"
 ;~ Local $lenovoPart2_example = "_10.2105.16.0_x64__k1h2ywk1493x8"
-_mstore()
+
 Func _mstore()
 
 
