@@ -2,37 +2,43 @@
 #include "UIAWrappers.au3"
 #include <Array.au3>
 #include <File.au3>
+#include <GUIConstants.au3>
 
-;~ Local $lenovoPart1_example = "E046963F"
-;~ Local $lenovoPart2_example = "_10.2105.16.0_x64__k1h2ywk1493x8"
 
 Func _mstore()
 
 
 Local $mStoreAppsPath = "C:\Program Files\WindowsApps\"
-Local $msAppName = ".LenovoCompanion"
-Local $appPath = _FileListToArray($mStoreAppsPath,"*" & $msAppName & "*" & "x64" & "*",2, True)
+Local $msAppName = ""
+Local $appPath
+;~ _ArrayDisplay( _FileListToArray($mStoreAppsPath,"*" & $msAppName & "*" & "x64" & "*",2, True) )
 Local $msTitle
 Local $msControlType
 Local $msTypeId
 Local $msClass
-_ArrayDisplay($appPath)
+Global $countdown = 10, $cCount
 
 
-Local $Msgtxt = "The following procedure could fail" & _
+
+Local $msgTxt = "The following procedure could fail" & _
 " to install application if you were to move your mouse or keyboard, "& _
 "please do not touch anything until task is completed." & _
-@CRLF & 'By pressing "Accept" button,' & " you're accepting to follow these conditions."
+@LF & @LF & 'By pressing "Accept" button,' & " you're giving your consent to follow these conditions."
 
-Local $mStoreGUI = GUICreate("", 615, 210, 592, 374, $WS_POPUP, $WS_EX_APPWINDOW)
-Local $ButtonAgree = GUICtrlCreateButton("Accept", 192, 136, 75, 25)
-Local $ButtonCancel = GUICtrlCreateButton("Cancel", 336, 136, 75, 25)
-Local $iMsg = GUICtrlCreateLabel($Msgtxt, 65, 48, 448, 84)
-GUICtrlSetFont(-1, 12, 400, 0, "Lucida Console")
+
+Global $mStoreGUI = GUICreate("", 615, 210, 592, 374, $WS_POPUP, $WS_EX_APPWINDOW)
+Global $ButtonAgree = GUICtrlCreateButton("Accept", 192, 136, 75, 25)
+GUICtrlSetState($ButtonAgree, $GUI_DISABLE)
+Global $ButtonCancel = GUICtrlCreateButton("Cancel", 336, 136, 75, 25)
+Global $iMsg = GUICtrlCreateLabel( $msgTxt, 25, 28, 548, 94, $SS_CENTER);BitOR($WS_BORDER, $SS_CENTER))
+GUICtrlSetFont($iMsg, 11.9, 400, 0, "Lucida Console")
+
 GUISetState(@SW_SHOW)
 
-
+AdlibRegister("countdown", 1000)
 While 1
+
+
 	Local $nMsg = GUIGetMsg()
 	Switch $nMsg
 		Case $GUI_EVENT_CLOSE
@@ -73,3 +79,16 @@ WEnd
 
 EndFunc
 
+Func countdown()
+
+$cCount = $countdown-1
+$countdown = $cCount
+	If $cCount = 0 Then
+		GUICtrlSetData($ButtonAgree, "Accept")
+		GUICtrlSetState($ButtonAgree, $GUI_ENABLE)
+		AdlibUnRegister("countdown")
+	Else
+		ConsoleWrite($cCount & @CRLF)
+		GUICtrlSetData($ButtonAgree, $cCount)
+	EndIf
+EndFunc

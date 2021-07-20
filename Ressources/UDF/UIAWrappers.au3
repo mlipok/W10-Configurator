@@ -735,7 +735,7 @@ Func _UIA_TFW_Init()
 	_UIA_LoadConfiguration()
 
 ;~ Log each time to a new logyyyymmddhhmmssms.XML file in log folder
-	Local $logFileName = @ScriptDir & "\LOG\" & @YEAR & @MON & @MDAY & "-" & @HOUR & @MIN & @SEC & @MSEC & ".XML"
+	Local $logFileName = @TempDir & "\UIA_LOG\" & @YEAR & @MON & @MDAY & "-" & @HOUR & @MIN & @SEC & @MSEC & ".XML"
 	_UIA_setVar("logFileName", $logFileName)
 	_UIA_LogFile($logFileName, True)
 
@@ -787,7 +787,7 @@ Func _UIA_LoadConfiguration()
 
 ;~ 	Some settings to use as a default
 
-	_UIA_setVar("Global.Debug", True)
+	_UIA_setVar("Global.Debug", False)
 	_UIA_setVar("Global.Debug.File", True)
 	_UIA_setVar("Global.Highlight", True)
 ;~ 	Check if we can find a configuration file and load it from that file
