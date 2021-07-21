@@ -21,7 +21,7 @@ Func choco()
 		EndIf
 	WEnd
 
-	Local $Pshell = Run("powershell -Command " & "choco" & " list -r | Out-String -Stream | foreach {$_.trimend(|)} | Where {$_ -ne ''}", @SystemDir, @SW_HIDE, $STDERR_MERGED)
+	Local $Pshell = Run("powershell -Command choco list -r --idonly | Out-String -Stream", @SystemDir, @SW_HIDE, $STDERR_MERGED)
 	c("Collecting list of available softwares... may take few minutes.")
 	ProcessWaitClose($Pshell)
 	$sRZCatalog = StringSplit(StdoutRead($Pshell), @CRLF, 1)
@@ -29,7 +29,7 @@ Func choco()
 
 	Local $ColCount = UBound($sRZCatalog, 1) - 1
 	_ArrayDelete($sRZCatalog, $ColCount) ;Removes the blank line at the end
-
+	_ArraySort($sRZCatalog,0,1)
 	If Not $sRZCatalog = Null Or IsArray($sRZCatalog) = True Then
 
 ;~ 		$RZUpdated = True
